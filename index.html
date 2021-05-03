@@ -9,7 +9,75 @@
         <link rel="stylesheet" href="style/index.css">        
     </head>
     <body>
-        <div id="content"></div>
+        <div id="content">
+            <div id="side-nav">
+                <div id="navigation">
+                    <div id="search">
+                        <input type="text" name="search-query" size="15"> 
+                    </div>
+                    <nav>
+                        <ul>
+                            <li>Inbox</li>
+                            <li>Upcoming</li>
+                            <li>Due Today</li>
+                            <li>Urgent</li>
+                        </ul>
+                    </nav>
+                </div>
+                <div id="projects">
+                    <ul>
+                        <li>* Project 1</li>
+                        <li>* Project 2</li>
+                        <li>* Project 3</li>
+                        <li>* Project 4</li>
+                    </ul>
+                </div>
+                <div id="add-project">
+                    + New Project
+                </div>
+            </div>
+            <div id="main-content">
+                <div id="main-todos">
+                    <div class="project-details">
+                        <h1 class="project-title">Project Title</h1>
+                        <p class="project-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse sed.</p>
+                    </div>
+                    <div class="project-todos">
+                        <div class="task">
+                            <div class="task-title">
+                                <h2>A task</h2>
+                                <div class="edit-task-btn">...</div>
+                            </div>
+                            <div class="task-todos">
+                                <ul>
+                                    <li><input type="checkbox" value="done"> todo item</li>
+                                    <li><input type="checkbox" value="done"> todo item</li>
+                                    <li><input type="checkbox" value="done"> todo item</li>                                                              
+                                </ul>
+                            </div>                            
+                        </div>
+                        <div class="task">
+                            <div class="task-title">
+                                <h2>A task without todos, checkbox</h2></span>
+                                <div class="edit-task-btn">...</div>
+                            </div>                           
+                        </div>                        
+                    </div>
+                </div>
+                <div id="main-aside">
+                    <div id="main-aside-top">
+                        <div id="edit-project-btn">
+                           -
+                        </div>
+                    </div>
+                    <div id="main-aside-bottom">
+                        <div id="add-todo-btn">
+                            +
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="js\main.js"></script>
     </body>
 </html>
