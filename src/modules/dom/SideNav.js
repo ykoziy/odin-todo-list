@@ -6,7 +6,7 @@ const markup = `
     ${renderNav()}
     ${renderProjects()}
     <div id="add-project">
-        + New Project
+        <div id="add-project-btn">+ New Project</div>
     </div>
     </div>
 `;
