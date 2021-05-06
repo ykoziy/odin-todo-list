@@ -1,18 +1,20 @@
 import Project from '../Project';
 
 const placeHolderProjects = [];
+generateProjects(4);
 
-function generateProjects() {
-    for (let i = 0; i <= 4; i++) {
-
+function generateProjects(count) {
+    for (let i = 1; i <= count; i++) {
+        let proj = new Project(`Project ${i}`);
+        placeHolderProjects.push(proj);
     }
 }
-// ! just for testing purposes....
-function renderProjects(projects) {
 
+function renderProjects(projects) {
+    return `${projects.map(proj => `<li><div class="circle-status"></div>${proj.title}</li>`).join('')}`;
 }
 
-function updateProgress(percent, circleElement) {
+function setProgress(percent, circleElement) {
   let angle = percent * 3.6;
   let secondGradient = 'linear-gradient(-90deg, green 50%, transparent 50%';
   if (percent > 100) {
@@ -28,15 +30,12 @@ function updateProgress(percent, circleElement) {
 const markup = `
     <div id="projects">
     <ul>
-        <li><div class="circle-status"></div>Project 1</li>
-        <li><div class="circle-status fifty"></div>Project 2</li>
-        <li><div class="circle-status"></div>Project 3</li>
-        <li><div class="circle-status hundred"></div> Project 4</li>
+    ${renderProjects(placeHolderProjects)}
     </ul>
     </div>
 `;
 
-function renderHTML(parentElement) {
+function renderHTML() {
     return markup;
 }
 
