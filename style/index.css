@@ -47,6 +47,18 @@ h2 {
     padding: 10px;
 }
 
+#navigation li {
+    margin: 10px 0 10px;
+    padding-left: 10px;
+}
+
+#navigation li:hover {
+    font-weight: bold;
+    cursor: pointer;
+    border-left: 3px solid #3366FF;
+    margin-left: -3px;
+}
+
 #search {
     padding-bottom: 15px;
 }
@@ -64,6 +76,36 @@ h2 {
     flex-direction: column;
     flex-grow: 1;
     padding: 10px;
+}
+
+#projects li {
+    display: flex;
+    align-items: center;
+    margin: 5px 0px 5px 0px;
+    padding-bottom: 5px;
+}
+
+#projects li:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.circle-status {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: white;
+    margin-right: 10px;
+}
+
+/* placeholder styling */
+.fifty {
+    background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(-90deg, slategray 50%, transparent 50%);
+}
+
+.hundred {
+    background-image: linear-gradient(90deg, slategray 50%, transparent 50%), linear-gradient(-90deg, slategray 50%, transparent 50%);
 }
 
 #add-project {
@@ -90,11 +132,11 @@ h2 {
 }
 
 .project-title {
-
+    margin-bottom: 15px;
 }
 
 .project-description {
-
+    margin-bottom: 15px;
 }
 
 .project-todos {
@@ -109,6 +151,14 @@ h2 {
     border-bottom: 2px solid white;
     padding-bottom: 10px;
     margin-bottom: 10px;
+}
+
+.task-todos {
+    margin-left: 15px;
+}
+
+.done {
+    text-decoration-line: line-through;
 }
 
 #main-aside {
