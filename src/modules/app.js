@@ -45,6 +45,10 @@ function urgentClickHandler() {
     console.log('urgent clicked');
 }
 
+function editProjectHandler(msg, data) {
+    console.log(`Clicked on edit project. Editing ${data}`);
+}
+
 function generateTasks(mainTaskCount, subTaskCount) {
     let data = [];
     for (let i = 1; i <= mainTaskCount; i++) {
@@ -76,9 +80,10 @@ function init() {
     PubSub.subscribe('getProject', (msg, data) => getProject(msg, data));
 
     PubSub.subscribe('inboxNavClick', inboxClickHandler);
-    PubSub.subscribe('upcomingNavClick', (msg) => upcomingClickHandler(msg));
-    PubSub.subscribe('todayNavClick', (msg) => todayClickHandler(msg));
+    PubSub.subscribe('upcomingNavClick', upcomingClickHandler);
+    PubSub.subscribe('todayNavClick', (msg) => todayClickHandler);
     PubSub.subscribe('urgentNavClick', (msg) => urgentClickHandler(msg));
+    PubSub.subscribe('editProjectClick', (msg, data) => editProjectHandler(msg, data));
 }
 
 export { init };

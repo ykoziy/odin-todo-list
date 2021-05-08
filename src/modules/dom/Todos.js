@@ -6,7 +6,7 @@ const markup = `
 function renderProjectDetails(title, description) {
     return `
         <div class="project-details">
-        <h1 class="project-title">${title}</h1>
+        <h1 class="project-title" data-title="${title}">${title}</h1>
         <p class="project-description">${description}</p>
         </div>
     `;

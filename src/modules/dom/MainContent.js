@@ -1,5 +1,6 @@
 import {renderHTML as renderTodos} from './Todos';
 import {renderHTML as renderAside} from './Aside';
+import PubSub from 'pubsub-js';
 
 const markup = `
     ${renderTodos()}
@@ -7,7 +8,10 @@ const markup = `
 `;
 
 function editProjectHandler(event) {
-    console.log('Clicked on edit project');  
+    const titleH1 = document.querySelector('.project-title');
+    if (!titleH1) return; 
+    const projectTitle = titleH1.dataset.title;
+    PubSub.publish('editProjectClick', projectTitle);
 }
 
 function addTaskHandler(event) {
