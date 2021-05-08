@@ -29,6 +29,22 @@ function generateProjects(count) {
     }
 }
 
+function inboxClickHandler() {
+    console.log('inbox clicked');
+}
+
+function upcomingClickHandler() {
+    console.log('upcoming clicked');
+}
+
+function todayClickHandler() {
+    console.log('today clicked');
+}
+
+function urgentClickHandler() {
+    console.log('urgent clicked');
+}
+
 function generateTasks(mainTaskCount, subTaskCount) {
     let data = [];
     for (let i = 1; i <= mainTaskCount; i++) {
@@ -58,6 +74,11 @@ function init() {
 
     PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));
     PubSub.subscribe('getProject', (msg, data) => getProject(msg, data));
+
+    PubSub.subscribe('inboxNavClick', inboxClickHandler);
+    PubSub.subscribe('upcomingNavClick', (msg) => upcomingClickHandler(msg));
+    PubSub.subscribe('todayNavClick', (msg) => todayClickHandler(msg));
+    PubSub.subscribe('urgentNavClick', (msg) => urgentClickHandler(msg));
 }
 
 export { init };

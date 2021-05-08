@@ -5,10 +5,10 @@ const markup = `
     </div>
     <nav>
         <ul>
-            <li>Inbox</li>
-            <li>Upcoming</li>
-            <li>Due Today</li>
-            <li>Urgent</li>
+            <li data-name="inbox">Inbox</li>
+            <li data-name="upcoming">Upcoming</li>
+            <li data-name="today">Due Today</li>
+            <li data-name="urgent">Urgent</li>
         </ul>
     </nav>
     </div>

@@ -20,7 +20,21 @@ function newProjectHandler(event) {
 function navHandler(event) {
     const node = event.target.nodeName.toLowerCase();
     if (node !== 'li') return;
-    console.log(`Clicked on ${event.target.textContent}`);
+    let menuButton = event.target.dataset.name;
+    switch (menuButton) {
+        case 'inbox':
+            PubSub.publish('inboxNavClick', null);
+            break;
+        case 'upcoming':
+            PubSub.publish('upcomingNavClick', null);
+            break;
+        case 'today':
+            PubSub.publish('todayNavClick', null);
+            break;
+        case 'urgent':
+            PubSub.publish('urgentNavClick', null);
+            break;
+    }
 }
 
 function projectHandler(event) {
