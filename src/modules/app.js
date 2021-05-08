@@ -17,6 +17,10 @@ function addNewProject(msg, data) {
     PubSub.publish('projectsUpdated', projects);
 }
 
+function getProject(msg, data) {
+    PubSub.publish('returnProject', projects[data]);
+}
+
 function generateProjects(count) {
     for (let i = 1; i <= count; i++) {
         let proj = new Project(`Project ${i}`);
@@ -32,7 +36,8 @@ function init() {
     renderMainContent(container);
     renderModal();
 
-    PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));    
+    PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));
+    PubSub.subscribe('getProject', (msg, data) => getProject(msg, data));
 }
 
 export { init };

@@ -27,6 +27,7 @@ function projectHandler(event) {
     const node = event.target.nodeName.toLowerCase();
     if (node !== 'li') return;
     console.log(`Clicked on ${event.target.textContent}`);
+    PubSub.publish('getProject', event.target.dataset.idx);
 }
 
 function renderHTML(parentElement, projects) {

@@ -11,8 +11,6 @@ function renderProjects(projects) {
     return `${projects.map((proj, idx) => `<li data-idx="${idx}"><div class="circle-status"></div>${proj.title}</li>`).join('')}`;
 }
 
-
-
 function setProgress(percent, circleElement) {
   let angle = percent * 3.6;
   let secondGradient = 'linear-gradient(-90deg, green 50%, transparent 50%';
