@@ -24,8 +24,28 @@ function getProject(msg, data) {
 function generateProjects(count) {
     for (let i = 1; i <= count; i++) {
         let proj = new Project(`Project ${i}`, `This is a placeholder project description for project #${i}`);
+        proj.tasks = generateTasks(3, 4);
         projects.push(proj);
     }
+}
+
+function generateTasks(mainTaskCount, subTaskCount) {
+    let data = [];
+    for (let i = 1; i <= mainTaskCount; i++) {
+        const tasklist = new TaskList(`Main task #${i}`);
+        let subtasks = [];
+        for (let j = 1; j <= subTaskCount; j++) {
+            let task = new Task(`a subtask #${j}`)
+            if (Math.round(Math.random()) == 1) {
+                task.isDone = true;
+            }
+            subtasks.push(task);
+        }
+        tasklist.tasks = subtasks;
+        data.push(tasklist);
+    }
+    data.push(new Task('A random task without subtasks'));
+    return data;
 }
 
 function init() {
