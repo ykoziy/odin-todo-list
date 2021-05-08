@@ -1,16 +1,20 @@
 import {renderHTML as renderNav} from './Nav';
 import {renderHTML as renderProjects} from './Projects';
+import PubSub from 'pubsub-js';
 
-const markup = `
-    ${renderNav()}
-    ${renderProjects()}
-    <div id="add-project">
-        <div id="add-project-btn">+ New Project</div>
-    </div>
-`;
+function generateMarkup(projects) {
+    return `
+        ${renderNav()}
+        ${renderProjects(projects)}
+        <div id="add-project">
+            <div id="add-project-btn">+ New Project</div>
+        </div>
+    `;
+}
+
 
 function newProjectHandler(event) {
-    console.log('+ New Project button clicked');
+    PubSub.publish('addProjectClick', null);
 }
 
 function navHandler(event) {
@@ -25,11 +29,11 @@ function projectHandler(event) {
     console.log(`Clicked on ${event.target.textContent}`);
 }
 
-function renderHTML(parentElement) {
+function renderHTML(parentElement, projects) {
     const div = document.createElement('div');
 
     div.setAttribute('id', 'side-nav');
-    div.innerHTML = markup;
+    div.innerHTML = generateMarkup(projects);
 
     div.querySelector('#add-project-btn').addEventListener('click', newProjectHandler);
 

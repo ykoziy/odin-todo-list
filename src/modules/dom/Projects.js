@@ -1,13 +1,10 @@
 import Project from '../Project';
+import PubSub from 'pubsub-js';
 
-const placeHolderProjects = [];
-generateProjects(4);
-
-function generateProjects(count) {
-    for (let i = 1; i <= count; i++) {
-        let proj = new Project(`Project ${i}`);
-        placeHolderProjects.push(proj);
-    }
+function updateProjects(msg, data) {
+    console.log('projects changed, need to refresh.');
+    const ul = document.querySelector('#projects ul');
+    ul.innerHTML = renderProjects(data);
 }
 
 function renderProjects(projects) {
@@ -27,16 +24,20 @@ function setProgress(percent, circleElement) {
   }
 }
 
-const markup = `
+function generateMarkup(projects) {
+    return `
     <div id="projects">
     <ul>
-    ${renderProjects(placeHolderProjects)}
+    ${renderProjects(projects)}
     </ul>
-    </div>
-`;
+    </div>`;    
+}
 
-function renderHTML() {
-    return markup;
+
+function renderHTML(projects) {
+
+    PubSub.subscribe('projectsUpdated', (msg, data) => updateProjects(msg, data));   
+    return generateMarkup(projects);
 }
 
 export { renderHTML };

@@ -1,27 +1,38 @@
 import Task from './Task';
 import TaskList from './TaskList';
+import Project from './Project';
 import { isToday, parseISO, format} from 'date-fns';
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';
+import {renderHTML as renderModal} from './dom/Modal';
+import PubSub from 'pubsub-js';
 
-function abra() {
+const projects = [];
 
+function addNewProject(msg, data) {
+    console.log('New project added.');
+    const proj = new Project(data.name, data.description);
+    projects.push(proj);
+    PubSub.publish('projectsUpdated', projects);
+}
+
+function generateProjects(count) {
+    for (let i = 1; i <= count; i++) {
+        let proj = new Project(`Project ${i}`);
+        projects.push(proj);
+    }
 }
 
 function init() {
-    let ta = new TaskList("Finish the Task class.", '2021-05-05');
-    let ta1 = new Task("Finish date formatting function.");
-    let ta2 = new Task("Need unit tests...");
-    ta.tasks = [ta1, ta2];
-
-    console.log(ta.title);
-
-
     let container = document.getElementById("content");
+    generateProjects(4);
 
-    renderSideNav(container);
+    renderSideNav(container, projects);
     renderMainContent(container);
+    renderModal();
+
+    PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));    
 }
 
 export { init };

@@ -1,0 +1,97 @@
+import PubSub from 'pubsub-js';
+
+function markup(title) {
+    let markup = `
+        <div class="modal-content">
+            <div class="modal-content-header"><h1>${title}</h1></div>
+            <div class="modal-content-body">
+                <form>
+                </form>
+            </div>
+        </div>    
+    `;
+    return markup;
+}
+
+function addNewProjectHandler(event) {
+    event.preventDefault();
+    const name = event.target.querySelector("#name").value;
+    const description = event.target.querySelector("#description").value;
+    const data = {name: name, description: description};
+    PubSub.publish('newProject', data);
+    hideModal();
+}
+
+function clickOutsideModalHandler(event) {
+    const modalContent = document.querySelector(".modal-content");
+    let target = event.target;
+    do {
+        if (target == modalContent) {
+            return;
+        }
+        target = target.parentNode;
+    } while (target);
+    hideModal();   
+}
+
+function createAndAppendLabel(forAttrib, text, parent) {
+    let label = document.createElement('label');
+    label.textContent = text;
+    label.setAttribute('for', forAttrib);
+    parent.appendChild(label);
+}
+
+function createAndAppendInput(type, id, isRequired, parent) {
+    let input = document.createElement('input');
+    input.type = type;
+    input.setAttribute('id', id);
+    if (isRequired) {
+        input.setAttribute('required', '');
+    }
+    parent.appendChild(input);
+}
+
+function createAndAppendSubmit(value, parent) {
+    let submit = document.createElement('input');
+    submit.type = 'submit';
+    submit.setAttribute('value', value);
+    parent.appendChild(submit);
+}
+
+function showAddProjectModal() {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = markup('Add Project');
+
+    let modalForm = modal.querySelector('form');
+    modalForm.setAttribute('id', 'add-project');
+
+    createAndAppendLabel('name', 'Project name:', modalForm);
+    createAndAppendInput('text', 'name', true, modalForm);
+    createAndAppendLabel('description', 'Project description:', modalForm);
+    createAndAppendInput('text', 'description', false, modalForm);
+    createAndAppendSubmit('Ok', modalForm);
+
+    modalForm.addEventListener('submit', addNewProjectHandler);
+
+
+    modal.style.display = 'flex';
+}
+
+function hideModal() {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = '';
+    modal.style.display = 'none';
+}
+
+function renderHTML() {
+    const div = document.createElement('div');
+    div.setAttribute('class', 'modal');
+
+    div.addEventListener('mousedown', clickOutsideModalHandler);
+
+    document.querySelector('body').appendChild(div);
+
+    PubSub.subscribe('addProjectClick', showAddProjectModal);  
+}
+
+export { renderHTML };
