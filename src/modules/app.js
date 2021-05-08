@@ -23,7 +23,7 @@ function getProject(msg, data) {
 
 function generateProjects(count) {
     for (let i = 1; i <= count; i++) {
-        let proj = new Project(`Project ${i}`);
+        let proj = new Project(`Project ${i}`, `This is a placeholder project description for project #${i}`);
         projects.push(proj);
     }
 }
