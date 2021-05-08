@@ -118,10 +118,12 @@ h2 {
     flex-grow: 2;
     display: flex;
     padding: 20px;
+    width: 100%;
 }
 
 #main-todos {
     display: flex;
+    flex-grow: 2;
     flex-direction: column;
     padding-right: 30px;
 }
