@@ -112,6 +112,9 @@ h2 {
     padding: 10px;
 }
 
+#add-project-btn {
+    cursor: pointer;
+}
 
 #main-content {
     background-color: lightslategray;
@@ -181,6 +184,7 @@ h2 {
     color: white;
     font-size: 45px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .edit-task-btn {
