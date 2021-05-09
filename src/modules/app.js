@@ -30,12 +30,16 @@ class App {
             return;
         }
     
+        let project = null;
+
         for (let i = 0; i < this.projects.length; i++) {
             if (this.projects[i].title == data.projectTitle) {
                 this.projects[i].addTask(task);
+                project = this.projects[i];
+                break;
             }
         }
-
+        PubSub.publish('projectUpdated', project);
     }
 
     getProject(msg, data) {

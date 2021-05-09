@@ -89,6 +89,7 @@ function renderProjectItem(msg, data) {
 
 function renderHTML(parentElement) {
     PubSub.subscribe('returnProject', (msg, data) => renderProjectItem(msg, data));
+    PubSub.subscribe('projectUpdated', (msg, data) => renderProjectItem(msg, data));
     return markup;
 }
 
