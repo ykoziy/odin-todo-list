@@ -8,62 +8,68 @@ import {renderHTML as renderMainContent} from './dom/MainContent';
 import {renderHTML as renderModal} from './dom/Modal';
 import PubSub from 'pubsub-js';
 
-const projects = [];
-
-function addNewProject(msg, data) {
-    console.log('New project added.');
-    const proj = new Project(data.name, data.description);
-    projects.push(proj);
-    PubSub.publish('projectsUpdated', projects);
-}
-
-// TODO: finish, adding task without project.
-function addNewTask(msg, data) {
-    console.log(`Adding task to the ${data.projectTitle} project`);
-    const task = new Task(data.title, parseISO(data.duedate));
-
-    if (data.projectTitle == null) {
-        console.log('project was null, add to the inbox?!?');
-        return;
+class App {
+    constructor(projects) {
+        this.projects = projects;
     }
 
-    for (let i = 0; i < projects.length; i++) {
-        if (projects[i].title == data.projectTitle) {
-            projects[i].addTask(task);
+    addNewProject(msg, data) {
+        console.log('New project added.');
+        const proj = new Project(data.name, data.description);
+        projects.push(proj);
+        PubSub.publish('projectsUpdated', projects);
+    }
+    
+    // TODO: finish, adding task without project.
+    addNewTask(msg, data) {
+        console.log(`Adding task to the ${data.projectTitle} project`);
+        const task = new Task(data.title, parseISO(data.duedate));
+    
+        if (data.projectTitle == null) {
+            console.log('project was null, add to the inbox?!?');
+            return;
+        }
+    
+        for (let i = 0; i < projects.length; i++) {
+            if (projects[i].title == data.projectTitle) {
+                projects[i].addTask(task);
+            }
         }
     }
-}
 
-function getProject(msg, data) {
-    PubSub.publish('returnProject', projects[data]);
+    getProject(msg, data) {
+        PubSub.publish('returnProject', projects[data]);
+    }
+    
+    inboxClickHandler() {
+        console.log('inbox clicked');
+    }
+    
+    upcomingClickHandler() {
+        console.log('upcoming clicked');
+    }
+    
+    todayClickHandler() {
+        console.log('today clicked');
+    }
+    
+    urgentClickHandler() {
+        console.log('urgent clicked');
+    }
+    
+    editProjectHandler(msg, data) {
+        console.log(`Clicked on edit project. Editing ${data}`);
+    }
 }
 
 function generateProjects(count) {
+    let projects = [];
     for (let i = 1; i <= count; i++) {
         let proj = new Project(`Project ${i}`, `This is a placeholder project description for project #${i}`);
         proj.tasks = generateTasks(3, 4);
         projects.push(proj);
     }
-}
-
-function inboxClickHandler() {
-    console.log('inbox clicked');
-}
-
-function upcomingClickHandler() {
-    console.log('upcoming clicked');
-}
-
-function todayClickHandler() {
-    console.log('today clicked');
-}
-
-function urgentClickHandler() {
-    console.log('urgent clicked');
-}
-
-function editProjectHandler(msg, data) {
-    console.log(`Clicked on edit project. Editing ${data}`);
+    return projects;
 }
 
 function generateTasks(mainTaskCount, subTaskCount) {
@@ -87,21 +93,23 @@ function generateTasks(mainTaskCount, subTaskCount) {
 
 function init() {
     let container = document.getElementById("content");
-    generateProjects(4);
+    let projects = generateProjects(4);
+
+    const app = new App(projects);
 
     renderSideNav(container, projects);
     renderMainContent(container);
     renderModal();
 
-    PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));
-    PubSub.subscribe('newTask', (msg, data) => addNewTask(msg, data));
-    PubSub.subscribe('getProject', (msg, data) => getProject(msg, data));
+    PubSub.subscribe('newProject', (msg, data) => app.addNewProject(msg, data));
+    PubSub.subscribe('newTask', (msg, data) => app.addNewTask(msg, data));
+    PubSub.subscribe('getProject', (msg, data) => app.getProject(msg, data));
 
-    PubSub.subscribe('inboxNavClick', inboxClickHandler);
-    PubSub.subscribe('upcomingNavClick', upcomingClickHandler);
-    PubSub.subscribe('todayNavClick', todayClickHandler);
-    PubSub.subscribe('urgentNavClick', urgentClickHandler);
-    PubSub.subscribe('editProjectClick', (msg, data) => editProjectHandler(msg, data));
+    PubSub.subscribe('inboxNavClick', app.inboxClickHandler);
+    PubSub.subscribe('upcomingNavClick', app.upcomingClickHandler);
+    PubSub.subscribe('todayNavClick', app.todayClickHandler);
+    PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
+    PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
 }
 
 export { init };
