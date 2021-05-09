@@ -16,8 +16,8 @@ class App {
     addNewProject(msg, data) {
         console.log('New project added.');
         const proj = new Project(data.name, data.description);
-        projects.push(proj);
-        PubSub.publish('projectsUpdated', projects);
+        this.projects.push(proj);
+        PubSub.publish('projectsUpdated', this.projects);
     }
     
     // TODO: finish, adding task without project.
@@ -30,15 +30,16 @@ class App {
             return;
         }
     
-        for (let i = 0; i < projects.length; i++) {
-            if (projects[i].title == data.projectTitle) {
-                projects[i].addTask(task);
+        for (let i = 0; i < this.projects.length; i++) {
+            if (this.projects[i].title == data.projectTitle) {
+                this.projects[i].addTask(task);
             }
         }
+
     }
 
     getProject(msg, data) {
-        PubSub.publish('returnProject', projects[data]);
+        PubSub.publish('returnProject', this.projects[data]);
     }
     
     inboxClickHandler() {
@@ -93,7 +94,7 @@ function generateTasks(mainTaskCount, subTaskCount) {
 
 function init() {
     let container = document.getElementById("content");
-    let projects = generateProjects(4);
+    const projects = generateProjects(4);
 
     const app = new App(projects);
 
