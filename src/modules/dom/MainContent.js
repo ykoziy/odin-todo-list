@@ -7,15 +7,20 @@ const markup = `
     ${renderAside()}
 `;
 
-function editProjectHandler(event) {
+function getProjectTitle() {
     const titleH1 = document.querySelector('.project-title');
-    if (!titleH1) return; 
-    const projectTitle = titleH1.dataset.title;
+    if (!titleH1) return null; 
+    return titleH1.dataset.title;
+}
+
+function editProjectHandler(event) {
+    const projectTitle = getProjectTitle();
     PubSub.publish('editProjectClick', projectTitle);
 }
 
 function addTaskHandler(event) {
-    console.log('Clicked on add task');  
+    const projectTitle = getProjectTitle();
+    PubSub.publish('addTaskClick', projectTitle);
 }
 
 function renderHTML(parentElement) {
