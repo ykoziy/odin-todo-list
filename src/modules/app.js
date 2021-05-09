@@ -17,6 +17,23 @@ function addNewProject(msg, data) {
     PubSub.publish('projectsUpdated', projects);
 }
 
+// TODO: finish, adding task without project.
+function addNewTask(msg, data) {
+    console.log(`Adding task to the ${data.projectTitle} project`);
+    const task = new Task(data.title, parseISO(data.duedate));
+
+    if (data.projectTitle == null) {
+        console.log('project was null, add to the inbox?!?');
+        return;
+    }
+
+    for (let i = 0; i < projects.length; i++) {
+        if (projects[i].title == data.projectTitle) {
+            projects[i].addTask(task);
+        }
+    }
+}
+
 function getProject(msg, data) {
     PubSub.publish('returnProject', projects[data]);
 }
@@ -77,6 +94,7 @@ function init() {
     renderModal();
 
     PubSub.subscribe('newProject', (msg, data) => addNewProject(msg, data));
+    PubSub.subscribe('newTask', (msg, data) => addNewTask(msg, data));
     PubSub.subscribe('getProject', (msg, data) => getProject(msg, data));
 
     PubSub.subscribe('inboxNavClick', inboxClickHandler);
