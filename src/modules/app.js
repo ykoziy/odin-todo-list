@@ -81,8 +81,8 @@ function init() {
 
     PubSub.subscribe('inboxNavClick', inboxClickHandler);
     PubSub.subscribe('upcomingNavClick', upcomingClickHandler);
-    PubSub.subscribe('todayNavClick', (msg) => todayClickHandler);
-    PubSub.subscribe('urgentNavClick', (msg) => urgentClickHandler(msg));
+    PubSub.subscribe('todayNavClick', todayClickHandler);
+    PubSub.subscribe('urgentNavClick', urgentClickHandler);
     PubSub.subscribe('editProjectClick', (msg, data) => editProjectHandler(msg, data));
 }
 
