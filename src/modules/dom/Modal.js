@@ -22,6 +22,15 @@ function addNewProjectHandler(event) {
     hideModal();
 }
 
+function addNewTaskHandler(event, projectTitle) {
+    event.preventDefault();
+    const title = event.target.querySelector("#title").value;
+    const duedate = event.target.querySelector("#duedate").value;
+    const data = {title: title, duedate: duedate, projectTitle: projectTitle};
+    PubSub.publish('newTask', data);
+    hideModal();
+}
+
 function clickOutsideModalHandler(event) {
     const modalContent = document.querySelector(".modal-content");
     let target = event.target;
@@ -73,6 +82,23 @@ function showAddProjectModal() {
 
     modalForm.addEventListener('submit', addNewProjectHandler);
 
+    modal.style.display = 'flex';
+}
+
+function showAddTaskModal(msg, data) {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = markup('Add Task');
+
+    let modalForm = modal.querySelector('form');
+    modalForm.setAttribute('id', 'add-task');
+
+    createAndAppendLabel('title', 'Task title:', modalForm);
+    createAndAppendInput('text', 'title', true, modalForm);
+    createAndAppendLabel('duedate', 'Due date:', modalForm);
+    createAndAppendInput('date', 'duedate', false, modalForm);
+    createAndAppendSubmit('Ok', modalForm);
+
+    modalForm.addEventListener('submit', (event) => (addNewTaskHandler(event, data)));
 
     modal.style.display = 'flex';
 }
@@ -91,7 +117,9 @@ function renderHTML() {
 
     document.querySelector('body').appendChild(div);
 
-    PubSub.subscribe('addProjectClick', showAddProjectModal);  
+    PubSub.subscribe('addProjectClick', showAddProjectModal);
+
+    PubSub.subscribe('addTaskClick', (msg, data) => showAddTaskModal(msg, data));
 }
 
 export { renderHTML };
