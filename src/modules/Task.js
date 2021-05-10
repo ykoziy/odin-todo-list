@@ -1,8 +1,8 @@
 export default class Task {
     constructor(title, dueDate = null) {
-        // default dueDate is null???
         this._title = title;
         this._dueDate = dueDate;
+        this._subTasks = [];
         this._isDone = false;
     }
 
@@ -29,4 +29,19 @@ export default class Task {
     get isDone() {
         return this._isDone;   
     }
+
+    set subTasks(subTasks) {
+        this._subTasks = subTasks;
+    }
+
+    get subTasks() {
+        return this._subTasks;
+    }
+
+    hasSubtasks() {
+        return !(this.subTasks.length == 0);
+    }
+
+
+    //I should be able to: add task, remove task, filter tasks, search, edit, etc... 
 }
