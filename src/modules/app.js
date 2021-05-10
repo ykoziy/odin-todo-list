@@ -38,15 +38,19 @@ class App {
         PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
+    // ! clicking on a task thta has subtasks toggles done class quickly....
     completeTaskHandler(msg, data) {
         const project = this.projects[Number(data.projectId)];
         if (project.tasks.has(data.taskId)) {
             const task = project.tasks.get(data.taskId);
             const subtask = task.getSubtask(data.subtaskId);
-            subtask.isDone = !subtask.isDone;
-            console.log(subtask);
+            if (subtask) {
+                subtask.isDone = !subtask.isDone;
+            } else {
+                task.isDone = !task.isDone;
+                console.log(task)
+            }
         }
-
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});
     }
 

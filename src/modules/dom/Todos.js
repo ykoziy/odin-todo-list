@@ -13,16 +13,16 @@ function renderProjectDetails(id, title, description) {
 }
 
 function generateTaskListItem(id, task) {
-    console.log(task.isDone);
     const classDone = `${task.isDone ? 'class="done"' : ''}`;
     return `<li data-id="${id}" ${classDone}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
 }
 
 function taskMarkup(id, task) {
+    const classDone = `${task.isDone ? 'class="done"' : ''}`;
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <h2>${task.title}</h2></span>
+                <h2 ${classDone}>${task.title}</h2></span>
                 <div class="edit-task-btn">...</div>
             </div>                           
         </div>
@@ -69,11 +69,12 @@ function renderProjectTasks(tasks) {
 
 function handleTodoClick(event, projectId) {
     const node = event.target.nodeName.toLowerCase();
-    if (node !== 'li') return;
-    const subtaskId = event.target.dataset.id;
-    const taskId = event.target.closest('.task').dataset.id;
-    event.srcElement.classList.toggle('done');
-    PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
+    if (node == 'li' || node == 'h2') {
+        const subtaskId = event.target.dataset.id;
+        const taskId = event.target.closest('.task').dataset.id;
+        event.srcElement.classList.toggle('done');
+        PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
+    }
 }
 
 function editTaskHandler(event) {
