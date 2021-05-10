@@ -36,7 +36,7 @@ function subtasksMarkup(task) {
             </div>
             <div class="task-todos">
                 <ul>
-                ${task.tasks.map(item => generateTaskListItem(item)).join('')}                                                       
+                ${task.subTasks.map(item => generateTaskListItem(item)).join('')}                                                       
                 </ul>
             </div>                            
         </div>
@@ -50,9 +50,9 @@ function renderProjectTasks(tasks) {
     let html = '';
 
     for (const task of tasks) {
-        if (task.constructor.name === 'TaskList') {
+        if (task.hasSubtasks()) {
             html += subtasksMarkup(task);
-        } else if (task.constructor.name === 'Task') {
+        } else {
             html += taskMarkup(task);
         }
     }
