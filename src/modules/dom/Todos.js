@@ -13,7 +13,9 @@ function renderProjectDetails(id, title, description) {
 }
 
 function generateTaskListItem(id, task) {
-    return `<li data-id="${id}"><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
+    console.log(task.isDone);
+    const classDone = `${task.isDone ? 'class="done"' : ''}`;
+    return `<li data-id="${id}" ${classDone}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
 }
 
 function taskMarkup(id, task) {
@@ -65,10 +67,13 @@ function renderProjectTasks(tasks) {
     return html;
 }
 
-function handleTodoClick(event) {
+function handleTodoClick(event, projectId) {
     const node = event.target.nodeName.toLowerCase();
     if (node !== 'li') return;
+    const subtaskId = event.target.dataset.id;
+    const taskId = event.target.closest('.task').dataset.id;
     event.srcElement.classList.toggle('done');
+    PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
 }
 
 function editTaskHandler(event) {
@@ -88,7 +93,7 @@ function renderProjectItem(msg, data) {
     div.innerHTML = html;
 
     const todos = div.querySelector('.project-todos');
-    todos.addEventListener('click', handleTodoClick);
+    todos.addEventListener('click', (event) => (handleTodoClick(event, data.id)));
 
     const editBtns = div.querySelectorAll('.edit-task-btn');
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));    

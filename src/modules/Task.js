@@ -31,7 +31,7 @@ export default class Task {
     get isDone() {
         return this._isDone;   
     }
-    
+
     get subTasks() {
         return this._subTasks;
     }
@@ -46,6 +46,10 @@ export default class Task {
             subtaskId = nanoid(6);
         } while (this._subTasks.has(subtaskId));
         this._subTasks.set(subtaskId, task);
+    }
+
+    getSubtask(id) {
+        return this._subTasks.get(id);
     }
 
 

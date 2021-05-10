@@ -38,6 +38,18 @@ class App {
         PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
+    completeTaskHandler(msg, data) {
+        const project = this.projects[Number(data.projectId)];
+        if (project.tasks.has(data.taskId)) {
+            const task = project.tasks.get(data.taskId);
+            const subtask = task.getSubtask(data.subtaskId);
+            subtask.isDone = !subtask.isDone;
+            console.log(subtask);
+        }
+
+        PubSub.publish('projectUpdated', {id: data.projectId, project: project});
+    }
+
     getProject(msg, idx) {
         const data = {id:idx, project:this.projects[idx]};
         PubSub.publish('returnProject', data);
@@ -111,6 +123,7 @@ function init() {
     PubSub.subscribe('todayNavClick', app.todayClickHandler);
     PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
+    PubSub.subscribe('completeTask', (msg, data) => app.completeTaskHandler(msg, data));
 }
 
 export { init };
