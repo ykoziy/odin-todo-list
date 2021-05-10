@@ -7,20 +7,20 @@ const markup = `
     ${renderAside()}
 `;
 
-function getProjectTitle() {
+function getProjectID() {
     const titleH1 = document.querySelector('.project-title');
-    if (!titleH1) return null; 
-    return titleH1.dataset.title;
+    if (!titleH1) return null;
+    return titleH1.dataset.idx;
 }
 
 function editProjectHandler(event) {
-    const projectTitle = getProjectTitle();
-    PubSub.publish('editProjectClick', projectTitle);
+    const projectID = getProjectID();
+    PubSub.publish('editProjectClick', projectID);
 }
 
 function addTaskHandler(event) {
-    const projectTitle = getProjectTitle();
-    PubSub.publish('addTaskClick', projectTitle);
+    const projectID = getProjectID();
+    PubSub.publish('addTaskClick', projectID);
 }
 
 function renderHTML(parentElement) {

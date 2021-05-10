@@ -22,24 +22,20 @@ class App {
     
     // TODO: finish, adding task without project.
     addNewTask(msg, data) {
-        console.log(`Adding task to the ${data.projectTitle} project`);
+        console.log(`Adding task to the project with id: ${data.id}`);
         const task = new Task(data.title, parseISO(data.duedate));
     
-        if (data.projectTitle == null) {
+        if (data.id == null) {
             console.log('project was null, add to the inbox?!?');
             return;
         }
     
         let project = null;
 
-        for (let i = 0; i < this.projects.length; i++) {
-            if (this.projects[i].title == data.projectTitle) {
-                this.projects[i].addTask(task);
-                project = this.projects[i];
-                break;
-            }
-        }
-        PubSub.publish('projectUpdated', project);
+        this.projects[data.id].addTask(task);
+        project = this.projects[data.id];
+
+        PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
     getProject(msg, idx) {
