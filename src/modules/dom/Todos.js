@@ -3,10 +3,10 @@ const markup = `
     </div>
 `;
 
-function renderProjectDetails(title, description) {
+function renderProjectDetails(id, title, description) {
     return `
         <div class="project-details">
-        <h1 class="project-title" data-title="${title}">${title}</h1>
+        <h1 class="project-title" data-idx="${id}">${title}</h1>
         <p class="project-description">${description}</p>
         </div>
     `;
@@ -76,11 +76,12 @@ function editTaskHandler(event) {
 }
 
 function renderProjectItem(msg, data) {
+    let projectItem = data.project;
     let div = document.querySelector('#main-todos');
     let html = `
-        ${renderProjectDetails(data.title, data.description)}
+        ${renderProjectDetails(data.id, projectItem.title, projectItem.description)}
         <div class="project-todos">
-        ${renderProjectTasks(data.tasks)}
+        ${renderProjectTasks(projectItem.tasks)}
         </div>
     `;
 

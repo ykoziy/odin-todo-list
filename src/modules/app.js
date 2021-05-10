@@ -42,8 +42,9 @@ class App {
         PubSub.publish('projectUpdated', project);
     }
 
-    getProject(msg, data) {
-        PubSub.publish('returnProject', this.projects[data]);
+    getProject(msg, idx) {
+        const data = {id:idx, project:this.projects[idx]};
+        PubSub.publish('returnProject', data);
     }
     
     inboxClickHandler() {
