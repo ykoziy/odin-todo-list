@@ -1,6 +1,7 @@
 import Task from './Task';
 import Project from './Project';
 import { isToday, parseISO, format} from 'date-fns';
+import { nanoid } from 'nanoid';
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';
@@ -70,7 +71,8 @@ function generateProjects(count) {
     let projects = [];
     for (let i = 1; i <= count; i++) {
         let proj = new Project(`Project ${i}`, `This is a placeholder project description for project #${i}`);
-        proj.tasks = generateTasks(3, 4);
+        const tasks = generateTasks(3, 4);
+        tasks.forEach(item => proj.addTask(item));
         projects.push(proj);
     }
     return projects;
@@ -80,15 +82,13 @@ function generateTasks(mainTaskCount, subTaskCount) {
     let data = [];
     for (let i = 1; i <= mainTaskCount; i++) {
         const task = new Task(`Main task #${i}`);
-        let subtasks = [];
         for (let j = 1; j <= subTaskCount; j++) {
             let subtask = new Task(`a subtask #${j}`)
             if (Math.round(Math.random()) == 1) {
-                task.isDone = true;
+                subtask.isDone = true;
             }
-            subtasks.push(subtask);
+            task.addSubtask(subtask);
         }
-        task.subTasks = [...subtasks];
         data.push(task);
     }
     data.push(new Task('A random task without subtasks'));

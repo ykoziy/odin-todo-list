@@ -12,13 +12,13 @@ function renderProjectDetails(title, description) {
     `;
 }
 
-function generateTaskListItem(task) {
-    return `<li><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
+function generateTaskListItem(id, task) {
+    return `<li data-id="${id}"><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
 }
 
-function taskMarkup(task) {
+function taskMarkup(id, task) {
     return `
-        <div class="task">
+        <div class="task" data-id="${id}">
             <div class="task-title">
                 <h2>${task.title}</h2></span>
                 <div class="edit-task-btn">...</div>
@@ -27,16 +27,22 @@ function taskMarkup(task) {
     `;
 }
 
-function subtasksMarkup(task) {
+function subtasksMarkup(id, task) {
+    const subtasks = [];
+
+    task.subTasks.forEach((task, key) => {
+        subtasks.push({id: key, task: task})
+    })
+
     return `
-        <div class="task">
+        <div class="task" data-id="${id}">
             <div class="task-title">
                 <h2>${task.title}</h2>
                 <div class="edit-task-btn">...</div>
             </div>
             <div class="task-todos">
                 <ul>
-                ${task.subTasks.map(item => generateTaskListItem(item)).join('')}                                                       
+                ${subtasks.map(item => generateTaskListItem(item.id, item.task)).join('')}                                                       
                 </ul>
             </div>                            
         </div>
@@ -49,11 +55,11 @@ function renderProjectTasks(tasks) {
 
     let html = '';
 
-    for (const task of tasks) {
+    for (const [id, task] of tasks) {
         if (task.hasSubtasks()) {
-            html += subtasksMarkup(task);
+            html += subtasksMarkup(id, task);
         } else {
-            html += taskMarkup(task);
+            html += taskMarkup(id, task);
         }
     }
     return html;

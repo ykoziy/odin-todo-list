@@ -1,8 +1,10 @@
+import { nanoid } from 'nanoid';
+
 export default class Task {
     constructor(title, dueDate = null) {
         this._title = title;
         this._dueDate = dueDate;
-        this._subTasks = [];
+        this._subTasks = new Map();
         this._isDone = false;
     }
 
@@ -29,17 +31,21 @@ export default class Task {
     get isDone() {
         return this._isDone;   
     }
-
-    set subTasks(subTasks) {
-        this._subTasks = subTasks;
-    }
-
+    
     get subTasks() {
         return this._subTasks;
     }
 
     hasSubtasks() {
-        return !(this.subTasks.length == 0);
+        return !(this.subTasks.size == 0);
+    }
+
+    addSubtask(task) {
+        let subtaskId = nanoid(6);
+        do {
+            subtaskId = nanoid(6);
+        } while (this._subTasks.has(subtaskId));
+        this._subTasks.set(subtaskId, task);
     }
 
 

@@ -1,8 +1,10 @@
+import { nanoid } from 'nanoid';
+
 export default class Project {
     constructor(title, description = null) {
         this._title = title;
         this._description = description
-        this._tasks = [];
+        this._tasks = new Map();
         this._isDone = false;
     }
 
@@ -27,7 +29,11 @@ export default class Project {
     }
 
     addTask(task) {
-        this._tasks.push(task);
+        let taskId = nanoid(6);
+        do {
+            taskId = nanoid(6);
+        } while (this._tasks.has(taskId));
+        this._tasks.set(taskId, task);
     }
 
     get tasks() {
