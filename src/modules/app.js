@@ -1,5 +1,4 @@
 import Task from './Task';
-import TaskList from './TaskList';
 import Project from './Project';
 import { isToday, parseISO, format} from 'date-fns';
 
@@ -80,17 +79,17 @@ function generateProjects(count) {
 function generateTasks(mainTaskCount, subTaskCount) {
     let data = [];
     for (let i = 1; i <= mainTaskCount; i++) {
-        const tasklist = new TaskList(`Main task #${i}`);
+        const task = new Task(`Main task #${i}`);
         let subtasks = [];
         for (let j = 1; j <= subTaskCount; j++) {
-            let task = new Task(`a subtask #${j}`)
+            let subtask = new Task(`a subtask #${j}`)
             if (Math.round(Math.random()) == 1) {
                 task.isDone = true;
             }
-            subtasks.push(task);
+            subtasks.push(subtask);
         }
-        tasklist.tasks = subtasks;
-        data.push(tasklist);
+        task.subTasks = [...subtasks];
+        data.push(task);
     }
     data.push(new Task('A random task without subtasks'));
     return data;
