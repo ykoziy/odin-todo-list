@@ -34,12 +34,13 @@ function subtasksMarkup(id, task) {
 
     task.subTasks.forEach((task, key) => {
         subtasks.push({id: key, task: task})
-    })
-
+    });
+    let tasksDone = subtasks.every(item => item.task.isDone);
+    const classDone = `${tasksDone ? 'class="done"' : ''}`;
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <h2>${task.title}</h2>
+                <h2 ${classDone}>${task.title}</h2>
                 <div class="edit-task-btn">...</div>
             </div>
             <div class="task-todos">
@@ -72,7 +73,6 @@ function handleTodoClick(event, projectId) {
     if (node == 'li' || node == 'h2') {
         const subtaskId = event.target.dataset.id;
         const taskId = event.target.closest('.task').dataset.id;
-        event.srcElement.classList.toggle('done');
         PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
     }
 }

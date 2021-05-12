@@ -38,17 +38,17 @@ class App {
         PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
-    // ! clicking on a task thta has subtasks toggles done class quickly....
+    // ! when subtasks completed, main task appears done but not the data
     completeTaskHandler(msg, data) {
+        console.log(data.projectId);
         const project = this.projects[Number(data.projectId)];
         if (project.tasks.has(data.taskId)) {
             const task = project.tasks.get(data.taskId);
             const subtask = task.getSubtask(data.subtaskId);
             if (subtask) {
                 subtask.isDone = !subtask.isDone;
-            } else {
+            } else if (task.subTasks.size == 0) {
                 task.isDone = !task.isDone;
-                console.log(task)
             }
         }
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});
