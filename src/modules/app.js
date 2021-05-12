@@ -40,7 +40,6 @@ class App {
 
     // ! when subtasks completed, main task appears done but not the data
     completeTaskHandler(msg, data) {
-        console.log(data.projectId);
         const project = this.projects[Number(data.projectId)];
         if (project.tasks.has(data.taskId)) {
             const task = project.tasks.get(data.taskId);
