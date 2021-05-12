@@ -8,20 +8,30 @@ function updateProjects(msg, data) {
 }
 
 function renderProjects(projects) {
-    return `${projects.map((proj, idx) => `<li data-idx="${idx}"><div class="circle-status"></div>${proj.title}</li>`).join('')}`;
+    const listItem = document.createElement('div');
+    listItem.classList.add('cicrle-status');
+    const html = `${
+        projects.map((proj, idx) => {
+            const style = setProgress(proj.getPercentComplete());
+            return `<li data-idx="${idx}"><div class="circle-status" style="${style}"></div>${proj.title}</li>`
+        }).join('')
+    }`;
+    return html;
 }
 
-function setProgress(percent, circleElement) {
+function setProgress(percent) {
   let angle = percent * 3.6;
   let secondGradient = 'linear-gradient(-90deg, green 50%, transparent 50%';
+  let style = 'background-image: ';
   if (percent > 100) {
       percent = 100;
   }
   if (percent <= 50) {
-        circleElement.style.backgroundImage = `linear-gradient(${angle - 90}deg, white 50%, transparent 50%), ${secondGradient})`;
+        style += `linear-gradient(${angle - 90}deg, white 50%, transparent 50%), ${secondGradient})`;
   } else {
-        circleElement.style.backgroundImage = `linear-gradient(${angle - 270}deg, green 50%, transparent 50%), ${secondGradient})`;
+        style += `linear-gradient(${angle - 270}deg, green 50%, transparent 50%), ${secondGradient})`;
   }
+  return style;
 }
 
 function generateMarkup(projects) {
@@ -35,7 +45,6 @@ function generateMarkup(projects) {
 
 
 function renderHTML(projects) {
-
     PubSub.subscribe('projectsUpdated', (msg, data) => updateProjects(msg, data));   
     return generateMarkup(projects);
 }
