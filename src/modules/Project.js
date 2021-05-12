@@ -36,6 +36,14 @@ export default class Project {
         this._tasks.set(taskId, task);
     }
 
+    getTask(taskId) {
+        return this._tasks.get(taskId);
+    }
+
+    hasTaskId(taskId) {
+        return this._tasks.has(taskId);
+    }
+
     get tasks() {
         return this._tasks;
     }
