@@ -35,8 +35,7 @@ function subtasksMarkup(id, task) {
     task.subTasks.forEach((task, key) => {
         subtasks.push({id: key, task: task})
     });
-    let tasksDone = subtasks.every(item => item.task.isDone);
-    const classDone = `${tasksDone ? 'class="done"' : ''}`;
+    const classDone = `${task.areSubtasksDone() ? 'class="done"' : ''}`;
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
