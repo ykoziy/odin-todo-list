@@ -75,7 +75,10 @@ class App {
     }
     
     editProjectHandler(msg, data) {
-        console.log(`Clicked on edit project. Editing ${data}`);
+        console.log(`Clicked on edit project. Editing ${data.id}`);
+        this.projects[data.id].title = data.title;
+        this.projects[data.id].description = data.description;
+        PubSub.publish('projectsUpdated', this.projects);
     }
 }
 

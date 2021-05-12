@@ -15,7 +15,20 @@ function getProjectID() {
 
 function editProjectHandler(event) {
     const projectID = getProjectID();
-    PubSub.publish('editProjectClick', projectID);
+
+    const editFields = document.querySelectorAll('.project-title, .project-description');
+
+    if (!editFields[0].isContentEditable) {
+        editFields[0].contentEditable = 'true';
+        editFields[1].contentEditable = 'true';
+    } else {
+        editFields[0].contentEditable = 'false';
+        editFields[1].contentEditable = 'false';
+        const title = editFields[0].textContent;
+        const description = editFields[1].textContent;
+        const data = {id: projectID, title: title, description: description};
+        PubSub.publish('editProjectClick', data);
+    }
 }
 
 function addTaskHandler(event) {
