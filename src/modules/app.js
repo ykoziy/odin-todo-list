@@ -46,9 +46,9 @@ class App {
             if (subtask) {
                 subtask.isDone = !subtask.isDone;
                 if (task.areSubtasksDone()) {
-                    task.isDone = !task.isDone;
+                    task.isDone = true;
                 } else {
-                    task.isDone = !task.isDone;
+                    task.isDone = false;
                 }
             } else if (!task.hasSubtasks()) {
                 task.isDone = !task.isDone;
