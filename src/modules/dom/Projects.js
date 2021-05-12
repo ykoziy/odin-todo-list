@@ -7,6 +7,11 @@ function updateProjects(msg, data) {
     ul.innerHTML = renderProjects(data);
 }
 
+function updateProjectProgress(msg, data) {
+    const div = document.querySelector(`li[data-idx="${data.id}"] div`);
+    div.style.cssText = setProgress(data.project.getPercentComplete());
+}
+
 function renderProjects(projects) {
     const listItem = document.createElement('div');
     listItem.classList.add('cicrle-status');
@@ -45,7 +50,8 @@ function generateMarkup(projects) {
 
 
 function renderHTML(projects) {
-    PubSub.subscribe('projectsUpdated', (msg, data) => updateProjects(msg, data));   
+    PubSub.subscribe('projectsUpdated', (msg, data) => updateProjects(msg, data));
+    PubSub.subscribe('projectUpdated', (msg, data) => updateProjectProgress(msg, data));    
     return generateMarkup(projects);
 }
 
