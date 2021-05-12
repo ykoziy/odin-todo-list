@@ -52,6 +52,15 @@ export default class Task {
         return this._subTasks.get(id);
     }
 
+    areSubtasksDone() {
+        if (this.subTasks.size == 0) {
+            return true;
+        } else {
+            const arr = Array.from(this.subTasks.values());
+            return arr.every(item => item.isDone == true);
+        }
+    }
+
 
     //I should be able to: add task, remove task, filter tasks, search, edit, etc... 
 }
