@@ -38,7 +38,6 @@ class App {
         PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
-    // ! when subtasks completed, main task appears done but not the data
     completeTaskHandler(msg, data) {
         const project = this.projects[Number(data.projectId)];
         if (project.hasTaskId(data.taskId)) {
@@ -46,7 +45,12 @@ class App {
             const subtask = task.getSubtask(data.subtaskId);
             if (subtask) {
                 subtask.isDone = !subtask.isDone;
-            } else if (task.subTasks.size == 0) {
+                if (task.areSubtasksDone()) {
+                    task.isDone = !task.isDone;
+                } else {
+                    task.isDone = !task.isDone;
+                }
+            } else if (!task.hasSubtasks()) {
                 task.isDone = !task.isDone;
             }
         }
