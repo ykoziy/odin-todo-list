@@ -46,5 +46,23 @@ export default class Project {
 
     get isDone() {
         return this._isDone;   
-    }    
+    }
+    
+    getPercentComplete() {
+        let totalCount = 0;
+        let doneCount = 0;
+        this._tasks.forEach(task => {
+            if (task.isDone) {
+                doneCount++;
+            }
+            totalCount++;
+            task.subTasks.forEach(subtask => {
+                if (subtask.isDone) {
+                    doneCount++;
+                }
+                totalCount++;
+            });
+        });
+        return 100*(doneCount/totalCount);
+    }
 }
