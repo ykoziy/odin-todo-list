@@ -39,9 +39,13 @@ function navHandler(event) {
 
 function projectHandler(event) {
     const node = event.target.nodeName.toLowerCase();
-    if (node !== 'li') return;
+    if (node !== 'li' && node !== 'p') return;
     console.log(`Clicked on ${event.target.textContent}`);
-    PubSub.publish('getProject', event.target.dataset.idx);
+    let targetId = event.target.dataset.idx;
+    if (node === 'p') {
+        targetId = event.target.parentElement.dataset.idx;
+    }
+    PubSub.publish('getProject', targetId);
 }
 
 function renderHTML(parentElement, projects) {
