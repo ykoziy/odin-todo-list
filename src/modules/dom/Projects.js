@@ -18,7 +18,7 @@ function renderProjects(projects) {
     const html = `${
         projects.map((proj, idx) => {
             const style = setProgress(proj.getPercentComplete());
-            return `<li data-idx="${idx}"><div class="circle-status" style="${style}"></div>${proj.title}</li>`
+            return `<li data-idx="${idx}"><div class="circle-status" style="${style}"></div><p>${proj.title}</p></li>`
         }).join('')
     }`;
     return html;
