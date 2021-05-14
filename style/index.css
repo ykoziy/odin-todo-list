@@ -158,6 +158,10 @@ h2 {
     margin-bottom: 10px;
 }
 
+.task-title .title {
+    display: flex; 
+}
+
 .task-todos {
     margin-left: 15px;
 }
