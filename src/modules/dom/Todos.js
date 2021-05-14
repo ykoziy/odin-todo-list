@@ -22,7 +22,7 @@ function taskMarkup(id, task) {
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <h2 ${classDone}>${task.title}</h2></span>
+                <div class="title"><h2 ${classDone}>${task.title}</h2></div>
                 <div class="edit-task-btn">...</div>
             </div>                           
         </div>
@@ -39,7 +39,7 @@ function subtasksMarkup(id, task) {
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <h2 ${classDone}>${task.title}</h2>
+                <div class="title"><h2 ${classDone}>${task.title}</h2></div>
                 <div class="edit-task-btn">...</div>
             </div>
             <div class="task-todos">
@@ -107,8 +107,15 @@ function createEditElements(parent) {
     deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
     deleteButton.addEventListener('click', deleteButtonHandler); 
 
-    parent.appendChild(editButton);
-    parent.appendChild(deleteButton);
+    const title = parent.querySelector('.title');
+
+    if (title) {
+        title.appendChild(editButton);
+        title.appendChild(deleteButton);
+    } else {
+        parent.appendChild(editButton);
+        parent.appendChild(deleteButton);
+    }
 }
 
 function editTaskHandler(event) {
