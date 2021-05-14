@@ -84,6 +84,16 @@ class App {
         this.projects[data.id].description = data.description;
         PubSub.publish('projectsUpdated', this.projects);
     }
+
+    deleteTaskHandler(msg, data) {
+        const project = this.projects[data.projectId];
+        if (data.subtaskId) {
+            project.getTask(data.taskId).deleteSubtask(data.subtaskId);
+        } else {
+            project.deleteTask(data.taskId);
+        }
+        PubSub.publish('projectUpdated', {id: data.projectId, project: project});
+    }
 }
 
 function generateProjects(count) {
@@ -134,6 +144,7 @@ function init() {
     PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
     PubSub.subscribe('completeTask', (msg, data) => app.completeTaskHandler(msg, data));
+    PubSub.subscribe('deleteTask', (msg, data) => app.deleteTaskHandler(msg, data));
 }
 
 export { init };
