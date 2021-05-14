@@ -40,6 +40,10 @@ export default class Project {
         return this._tasks.get(taskId);
     }
 
+    deleteTask(taskId) {
+        return this._tasks.delete(taskId);
+    }
+
     hasTaskId(taskId) {
         return this._tasks.has(taskId);
     }
