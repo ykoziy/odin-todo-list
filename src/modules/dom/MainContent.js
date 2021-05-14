@@ -18,13 +18,22 @@ function editProjectHandler(event) {
 
     const editFields = document.querySelectorAll('.project-title, .project-description');
 
+    if (editFields.length == 0) {
+        return;
+    }
+
     if (!editFields[0].isContentEditable) {
         editFields[0].contentEditable = 'true';
         editFields[1].contentEditable = 'true';
     } else {
+        const title = editFields[0].textContent;
+        // title cannot be empty, show error modal?
+        if (title.length == 0) {
+            console.log('error, title cannot be blank');
+            return;
+        }        
         editFields[0].contentEditable = 'false';
         editFields[1].contentEditable = 'false';
-        const title = editFields[0].textContent;
         const description = editFields[1].textContent;
         const data = {id: projectID, title: title, description: description};
         PubSub.publish('editProjectClick', data);
