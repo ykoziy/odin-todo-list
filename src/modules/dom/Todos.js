@@ -76,8 +76,53 @@ function handleTodoClick(event, projectId) {
     }
 }
 
+function clearButtons() {
+    const icons = document.querySelector('.project-todos').querySelectorAll('button');
+    icons.forEach(item => {
+        item.remove();
+    });
+}
+
+function editButtonHandler(event) {
+    const projectId = document.querySelector('.project-title').dataset.idx;
+    const taskId = event.currentTarget.closest('.task').dataset.id;
+    const subtaskId = event.currentTarget.parentElement.dataset.id;
+    console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
+}
+
+function deleteButtonHandler(event) {
+    const projectId = document.querySelector('.project-title').dataset.idx;
+    const taskId = event.currentTarget.closest('.task').dataset.id;
+    const subtaskId = event.currentTarget.parentElement.dataset.id;
+    console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
+    PubSub.publish('deleteTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId});
+}
+
+function createEditElements(parent) {
+    const editButton = document.createElement('button');
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
+    editButton.addEventListener('click', editButtonHandler); 
+
+    const deleteButton = document.createElement('button');
+    deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+    deleteButton.addEventListener('click', deleteButtonHandler); 
+
+    parent.appendChild(editButton);
+    parent.appendChild(deleteButton);
+}
+
 function editTaskHandler(event) {
-    console.log('Clicked edit task');
+    const taskElement = event.target.closest('.task');
+    const subTasks = taskElement.querySelectorAll('li');
+    const taskId = taskElement.dataset.id;
+
+    clearButtons();
+
+    createEditElements(taskElement.querySelector('.task-title'));
+
+    subTasks.forEach(item => {
+        createEditElements(item);
+    });
 }
 
 function renderProjectItem(msg, data) {
@@ -93,7 +138,7 @@ function renderProjectItem(msg, data) {
     div.innerHTML = html;
 
     const todos = div.querySelector('.project-todos');
-    todos.addEventListener('click', (event) => (handleTodoClick(event, data.id)));
+    todos.addEventListener('click', event => handleTodoClick(event, data.id));
 
     const editBtns = div.querySelectorAll('.edit-task-btn');
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));    
