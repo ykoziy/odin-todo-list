@@ -48,6 +48,10 @@ export default class Task {
         this._subTasks.set(subtaskId, task);
     }
 
+    deleteSubtask(id) {
+        return this._subTasks.delete(id);
+    }
+
     getSubtask(id) {
         return this._subTasks.get(id);
     }
