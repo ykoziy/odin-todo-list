@@ -76,6 +76,8 @@ h2 {
     flex-direction: column;
     flex-grow: 1;
     padding: 10px;
+    overflow: auto;
+    height: 30%;
 }
 
 #projects li {
@@ -83,6 +85,13 @@ h2 {
     align-items: center;
     margin: 5px 0px 5px 0px;
     padding-bottom: 5px;
+}
+
+#projects li p {
+    max-width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
 }
 
 #projects li:hover {
@@ -122,6 +131,7 @@ h2 {
     display: flex;
     padding: 20px;
     width: 100%;
+    overflow: auto;
 }
 
 #main-todos {
@@ -129,6 +139,7 @@ h2 {
     flex-grow: 2;
     flex-direction: column;
     padding-right: 30px;
+    word-break:break-word;
 }
 
 .project-details {
@@ -138,10 +149,12 @@ h2 {
 
 .project-title {
     margin-bottom: 15px;
+    padding: 5px;
 }
 
 .project-description {
     margin-bottom: 15px;
+    padding: 5px;
 }
 
 .project-todos {
@@ -190,6 +203,13 @@ h2 {
     font-weight: bold;
     cursor: pointer;
 }
+
+[contenteditable=true] {
+    background: rgba(255,255,255,0.5); /* transparent bg */
+    resize: none;
+    max-width: 80%;
+    outline: 2px solid white;
+ }
 
 .edit-task-btn {
     color: white;
