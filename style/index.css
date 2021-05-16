@@ -214,7 +214,25 @@ h2 {
 .edit-task-btn {
     color: white;
     font-size: 30px;
-    font-weight: bold;    
+    font-weight: bold;
+    cursor: pointer;   
+}
+
+.change-task-btn {
+    color: darkgreen;
+}
+
+.delete-task-btn {
+    color: red;
+}
+
+.change-task-btn,
+.delete-task-btn {
+    cursor: pointer;
+    margin-left: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background: lightgray;
 }
 
 .modal {
