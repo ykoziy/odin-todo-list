@@ -3,6 +3,9 @@ const markup = `
     </div>
 `;
 
+let EDITING_ID = null;
+let EDIT = false;
+
 function renderProjectDetails(id, title, description) {
     return `
         <div class="project-details">
@@ -68,10 +71,14 @@ function renderProjectTasks(tasks) {
 }
 
 function handleTodoClick(event, projectId) {
-    const node = event.target.nodeName.toLowerCase();
-    if (node == 'li' || node == 'h2') {
-        const subtaskId = event.target.dataset.id;
-        const taskId = event.target.closest('.task').dataset.id;
+    let targetNode = event.target;
+    const nodeName = targetNode.nodeName.toLowerCase();
+    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox') {
+        if (targetNode.type == 'checkbox') {
+            targetNode = event.target.parentElement;
+        }
+        const subtaskId = targetNode.dataset.id;
+        const taskId = targetNode.closest('.task').dataset.id;
         PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
     }
 }
@@ -83,11 +90,54 @@ function clearButtons() {
     });
 }
 
+function createEditFields(parent) {
+    const txtInput = document.createElement('input');
+    txtInput.setAttribute('type', 'text');
+    txtInput.setAttribute('id', 'tasktxt');
+    txtInput.required = true;
+    txtInput.value = parent.textContent;
+
+    //parent.childNodes[1].textContent = '';
+
+    const dateInput = document.createElement('input');
+    dateInput.setAttribute('type', 'date');
+    dateInput.setAttribute('id', 'taskdate');
+    parent.insertBefore(txtInput, parent.childNodes[2]);
+    parent.insertBefore(dateInput, parent.childNodes[3]);
+}
+
+function clearEditFields() {
+    const editFields = document.querySelectorAll('#tasktxt, #taskdate');
+    editFields.forEach(item => {
+        item.remove();
+    });
+}
+
 function editButtonHandler(event) {
     const projectId = document.querySelector('.project-title').dataset.idx;
     const taskId = event.currentTarget.closest('.task').dataset.id;
     const subtaskId = event.currentTarget.parentElement.dataset.id;
     console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
+
+    const listItem = event.currentTarget.parentElement;
+
+    if (EDITING_ID == null) {
+        createEditFields(listItem);
+        EDITING_ID = subtaskId;
+    } else if (EDITING_ID !== subtaskId) {
+        clearEditFields();
+        createEditFields(listItem);
+        EDITING_ID = subtaskId;
+    } else if (EDITING_ID === subtaskId) {
+        if (document.querySelector('#tasktxt').validity.valid) {
+            console.log('Submitting ' + subtaskId);
+            clearEditFields();
+            EDITING_ID = null;
+        } else {
+            console.log('Task title cannot be empty');
+        }
+    }
+
 }
 
 function deleteButtonHandler(event) {
@@ -118,21 +168,30 @@ function createEditElements(parent) {
     }
 }
 
+
 function editTaskHandler(event) {
     const taskElement = event.target.closest('.task');
     const subTasks = taskElement.querySelectorAll('li');
     const taskId = taskElement.dataset.id;
 
-    clearButtons();
+    if (EDIT) {
+        clearButtons();
+        clearEditFields();
+        EDIT = false;
+        return;
+    }
 
     createEditElements(taskElement.querySelector('.task-title'));
 
     subTasks.forEach(item => {
         createEditElements(item);
     });
+    EDIT = true;
 }
 
 function renderProjectItem(msg, data) {
+    EDITING_ID = null;
+    EDIT = false;
     let projectItem = data.project;
     let div = document.querySelector('#main-todos');
     let html = `
@@ -148,7 +207,7 @@ function renderProjectItem(msg, data) {
     todos.addEventListener('click', event => handleTodoClick(event, data.id));
 
     const editBtns = div.querySelectorAll('.edit-task-btn');
-    editBtns.forEach(item => item.addEventListener('click', editTaskHandler));    
+    editBtns.forEach(item => item.addEventListener('click', editTaskHandler));
 }
 
 function renderHTML(parentElement) {
