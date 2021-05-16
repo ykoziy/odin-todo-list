@@ -16,8 +16,8 @@ function renderProjectDetails(id, title, description) {
 }
 
 function generateTaskListItem(id, task) {
-    const classDone = `${task.isDone ? 'class="done"' : ''}`;
-    return `<li data-id="${id}" ${classDone}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
+    const htmlClass = `${task.isDone ? 'class="subtask done"' : 'class="subtask"'}`;
+    return `<li data-id="${id}" ${htmlClass}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
 }
 
 function taskMarkup(id, task) {
@@ -150,10 +150,12 @@ function deleteButtonHandler(event) {
 
 function createEditElements(parent) {
     const editButton = document.createElement('button');
+    editButton.classList.add('change-task-btn');
     editButton.innerHTML = '<i class="fas fa-edit"></i>';
     editButton.addEventListener('click', editButtonHandler); 
 
     const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-task-btn');
     deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
     deleteButton.addEventListener('click', deleteButtonHandler); 
 
