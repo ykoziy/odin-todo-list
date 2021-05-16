@@ -91,37 +91,52 @@ function clearButtons() {
 }
 
 function createEditFields(parent) {
+  //  let checkBox = parent.querySelector('input[type="checkbox"]');
+    //if (checkBox) {
+   //     parent.querySelector('input[type="checkbox"]').disabled = true;
+   // }
+    parent.querySelector('input[type="checkbox"]').disabled = true;
     const txtInput = document.createElement('input');
     txtInput.setAttribute('type', 'text');
     txtInput.setAttribute('id', 'tasktxt');
     txtInput.required = true;
     txtInput.value = parent.textContent;
 
-    //parent.childNodes[1].textContent = '';
+    parent.childNodes[1].remove();
 
     const dateInput = document.createElement('input');
     dateInput.setAttribute('type', 'date');
     dateInput.setAttribute('id', 'taskdate');
-    parent.insertBefore(txtInput, parent.childNodes[2]);
-    parent.insertBefore(dateInput, parent.childNodes[3]);
+    parent.insertBefore(txtInput, parent.childNodes[1]);
+    parent.insertBefore(dateInput, parent.childNodes[2]);
 }
 
 function clearEditFields() {
     const editFields = document.querySelectorAll('#tasktxt, #taskdate');
+    if (editFields.length == 0) {
+        return;
+    }
+    editFields[0].parentNode.querySelector('input[type="checkbox"]').disabled = false;
     editFields.forEach(item => {
+        if (item.type == 'text') {
+            const txt = document.createTextNode(item.value);
+            item.parentNode.insertBefore(txt, item.nextSibling);;
+        }
         item.remove();
     });
 }
 
 function editButtonHandler(event) {
+    const parentElement = event.currentTarget.parentNode;
     const projectId = document.querySelector('.project-title').dataset.idx;
-    const taskId = event.currentTarget.closest('.task').dataset.id;
-    const subtaskId = event.currentTarget.parentElement.dataset.id;
+    const taskId = parentElement.closest('.task').dataset.id;
+    const subtaskId = parentElement.dataset.id;
     console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
 
-    const listItem = event.currentTarget.parentElement;
+    const listItem = parentElement;
 
     if (EDITING_ID == null) {
+        clearEditFields();
         createEditFields(listItem);
         EDITING_ID = subtaskId;
     } else if (EDITING_ID !== subtaskId) {
@@ -129,6 +144,11 @@ function editButtonHandler(event) {
         createEditFields(listItem);
         EDITING_ID = subtaskId;
     } else if (EDITING_ID === subtaskId) {
+        const taskTxt = document.querySelector('#tasktxt');
+        if (!taskTxt) {
+            createEditFields(listItem);
+            return;
+        }
         if (document.querySelector('#tasktxt').validity.valid) {
             console.log('Submitting ' + subtaskId);
             clearEditFields();
@@ -137,7 +157,6 @@ function editButtonHandler(event) {
             console.log('Task title cannot be empty');
         }
     }
-
 }
 
 function deleteButtonHandler(event) {
