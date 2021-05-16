@@ -91,18 +91,21 @@ function clearButtons() {
 }
 
 function createEditFields(parent) {
-  //  let checkBox = parent.querySelector('input[type="checkbox"]');
-    //if (checkBox) {
-   //     parent.querySelector('input[type="checkbox"]').disabled = true;
-   // }
-    parent.querySelector('input[type="checkbox"]').disabled = true;
+    let checkBox = parent.querySelector('input[type="checkbox"]');
+    if (checkBox) {
+        parent.querySelector('input[type="checkbox"]').style.display = 'none';
+    }
     const txtInput = document.createElement('input');
     txtInput.setAttribute('type', 'text');
     txtInput.setAttribute('id', 'tasktxt');
     txtInput.required = true;
     txtInput.value = parent.textContent;
 
-    parent.childNodes[1].remove();
+    if (checkBox) {
+        parent.childNodes[1].remove();
+    } else {
+        parent.childNodes[0].style.display = 'none';
+    }
 
     const dateInput = document.createElement('input');
     dateInput.setAttribute('type', 'date');
@@ -116,11 +119,20 @@ function clearEditFields() {
     if (editFields.length == 0) {
         return;
     }
-    editFields[0].parentNode.querySelector('input[type="checkbox"]').disabled = false;
+    
+    const mainTask = editFields[0].parentNode.querySelector('h2');
+    if (mainTask) {
+        mainTask.style.display = 'block';
+    } else {
+        editFields[0].parentNode.querySelector('input[type="checkbox"]').style.display = 'initial';
+    }
+
     editFields.forEach(item => {
-        if (item.type == 'text') {
+        if (item.type == 'text' && !mainTask) {
             const txt = document.createTextNode(item.value);
-            item.parentNode.insertBefore(txt, item.nextSibling);;
+            item.parentNode.insertBefore(txt, item.nextSibling);
+        } else if (item.type == 'text' && mainTask) {
+            mainTask.textContent = item.value;
         }
         item.remove();
     });
