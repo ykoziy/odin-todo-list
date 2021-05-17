@@ -126,7 +126,7 @@ function generateTasks(mainTaskCount, subTaskCount) {
     for (let i = 1; i <= mainTaskCount; i++) {
         const task = new Task(`Main task #${i}`);
         for (let j = 1; j <= subTaskCount; j++) {
-            let subtask = new Task(`a subtask #${j}`)
+            let subtask = new Task(`a subtask #${j}`, new Date());
             if (Math.round(Math.random()) == 1) {
                 subtask.isDone = true;
             }
