@@ -218,7 +218,7 @@ h2 {
     cursor: pointer;   
 }
 
-.change-task-btn {
+.submit-task-btn {
     color: darkgreen;
 }
 
@@ -227,7 +227,8 @@ h2 {
 }
 
 .change-task-btn,
-.delete-task-btn {
+.delete-task-btn,
+.submit-task-btn {
     cursor: pointer;
     margin-left: 5px;
     border: 1px solid black;
