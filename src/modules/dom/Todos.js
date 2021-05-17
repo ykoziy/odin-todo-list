@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 const markup = `
     <div id="main-todos">
     </div>
@@ -15,8 +17,9 @@ function renderProjectDetails(id, title, description) {
 
 function generateTaskListItem(id, task) {
     const htmlClass = `${task.isDone ? 'class="subtask done"' : 'class="subtask"'}`;
+    const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
     return `<li data-id="${id}" ${htmlClass}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span class='task-txt'>${task.title}</span><span class='task-due-date'>${task.dueDate}</span></li>`;
+            <span class='task-txt'>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
 }
 
 function taskMarkup(id, task) {
