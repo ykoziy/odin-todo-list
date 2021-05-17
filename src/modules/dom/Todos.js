@@ -15,7 +15,8 @@ function renderProjectDetails(id, title, description) {
 
 function generateTaskListItem(id, task) {
     const htmlClass = `${task.isDone ? 'class="subtask done"' : 'class="subtask"'}`;
-    return `<li data-id="${id}" ${htmlClass}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>${task.title}</li>`;
+    return `<li data-id="${id}" ${htmlClass}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
+            <span class='task-txt'>${task.title}</span><span class='task-due-date'>${task.dueDate}</span></li>`;
 }
 
 function taskMarkup(id, task) {
@@ -71,11 +72,11 @@ function renderProjectTasks(tasks) {
 function handleTodoClick(event, projectId) {
     let targetNode = event.target;
     const nodeName = targetNode.nodeName.toLowerCase();
-    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox') {
+    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox' || nodeName == 'span') {
         if (targetNode.type == 'checkbox') {
             targetNode = event.target.parentElement;
         }
-        const subtaskId = targetNode.dataset.id;
+        const subtaskId = targetNode.closest('.subtask').dataset.id;
         const taskId = targetNode.closest('.task').dataset.id;
         PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
     }
