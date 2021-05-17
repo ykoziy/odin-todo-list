@@ -105,8 +105,8 @@ class App {
             } else {
                 task.title = data.txt;
             }
-        }    
-        console.log(project);    
+        }
+        PubSub.publish('projectUpdated', {id: data.projectId, project: project});   
     }
 }
 
