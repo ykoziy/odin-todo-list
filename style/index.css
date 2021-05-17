@@ -222,6 +222,10 @@ h2 {
     color: darkgreen;
 }
 
+.submit-task-btn:disabled {
+    color: gray;
+}
+
 .delete-task-btn {
     color: red;
 }
