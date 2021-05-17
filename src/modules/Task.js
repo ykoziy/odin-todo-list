@@ -1,9 +1,11 @@
 import { nanoid } from 'nanoid';
+import { parseISO, format } from 'date-fns';
 
 export default class Task {
     constructor(title, dueDate = null) {
         this._title = title;
         this._dueDate = dueDate;
+        this._creationDate = new Date();
         this._subTasks = new Map();
         this._isDone = false;
     }
