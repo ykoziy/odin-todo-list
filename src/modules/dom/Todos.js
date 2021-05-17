@@ -2,8 +2,6 @@ const markup = `
     <div id="main-todos">
     </div>
 `;
-
-let EDITING_ID = null;
 let EDIT = false;
 
 function renderProjectDetails(id, title, description) {
@@ -110,16 +108,23 @@ function createEditFields(parent) {
     const dateInput = document.createElement('input');
     dateInput.setAttribute('type', 'date');
     dateInput.setAttribute('id', 'taskdate');
+
+    const submitButton = document.createElement('button');
+    submitButton.classList.add('submit-task-btn');
+    submitButton.innerHTML = '<i class="fas fa-check-square"></i>';
+
     parent.insertBefore(txtInput, parent.childNodes[1]);
     parent.insertBefore(dateInput, parent.childNodes[2]);
+    parent.insertBefore(submitButton, parent.childNodes[3]);
 }
 
 function clearEditFields() {
     const editFields = document.querySelectorAll('#tasktxt, #taskdate');
+
     if (editFields.length == 0) {
         return;
     }
-    
+
     const mainTask = editFields[0].parentNode.querySelector('h2');
     if (mainTask) {
         mainTask.style.display = 'block';
@@ -136,6 +141,7 @@ function clearEditFields() {
         }
         item.remove();
     });
+    document.querySelector('.submit-task-btn').remove();
 }
 
 function editButtonHandler(event) {
@@ -143,32 +149,23 @@ function editButtonHandler(event) {
     const projectId = document.querySelector('.project-title').dataset.idx;
     const taskId = parentElement.closest('.task').dataset.id;
     const subtaskId = parentElement.dataset.id;
+    const listItem = parentElement;
+    
     console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
 
-    const listItem = parentElement;
+    clearEditFields();
+    createEditFields(listItem);
 
-    if (EDITING_ID == null) {
-        clearEditFields();
-        createEditFields(listItem);
-        EDITING_ID = subtaskId;
-    } else if (EDITING_ID !== subtaskId) {
-        clearEditFields();
-        createEditFields(listItem);
-        EDITING_ID = subtaskId;
-    } else if (EDITING_ID === subtaskId) {
+    listItem.querySelector('.submit-task-btn').addEventListener('click', (event) => {
         const taskTxt = document.querySelector('#tasktxt');
-        if (!taskTxt) {
-            createEditFields(listItem);
-            return;
-        }
-        if (document.querySelector('#tasktxt').validity.valid) {
-            console.log('Submitting ' + subtaskId);
+        if (taskTxt.validity.valid) {
+            console.log('Submitting ' + subtaskId || taskId);
+            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value});
             clearEditFields();
-            EDITING_ID = null;
         } else {
-            console.log('Task title cannot be empty');
+            console.log('task title cannot be empty');
         }
-    }
+    });
 }
 
 function deleteButtonHandler(event) {
@@ -223,7 +220,6 @@ function editTaskHandler(event) {
 }
 
 function renderProjectItem(msg, data) {
-    EDITING_ID = null;
     EDIT = false;
     let projectItem = data.project;
     let div = document.querySelector('#main-todos');
