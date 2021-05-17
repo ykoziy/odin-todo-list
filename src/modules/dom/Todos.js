@@ -113,6 +113,14 @@ function createEditFields(parent) {
     submitButton.classList.add('submit-task-btn');
     submitButton.innerHTML = '<i class="fas fa-check-square"></i>';
 
+    txtInput.addEventListener('keyup', (event) => {
+        if (event.target.value.trim() != "") {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    })
+
     parent.insertBefore(txtInput, parent.childNodes[1]);
     parent.insertBefore(dateInput, parent.childNodes[2]);
     parent.insertBefore(submitButton, parent.childNodes[3]);
@@ -156,7 +164,10 @@ function editButtonHandler(event) {
     clearEditFields();
     createEditFields(listItem);
 
-    listItem.querySelector('.submit-task-btn').addEventListener('click', (event) => {
+    const submitTaskBtn = listItem.querySelector('.submit-task-btn');
+    
+
+    submitTaskBtn.addEventListener('click', (event) => {
         const taskTxt = document.querySelector('#tasktxt');
         if (taskTxt.validity.valid) {
             console.log('Submitting ' + subtaskId || taskId);
@@ -205,8 +216,8 @@ function editTaskHandler(event) {
     const taskId = taskElement.dataset.id;
 
     if (EDIT) {
-        clearButtons();
         clearEditFields();
+        clearButtons();
         EDIT = false;
         return;
     }
