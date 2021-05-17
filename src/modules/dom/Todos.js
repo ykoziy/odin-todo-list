@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const markup = `
     <div id="main-todos">
@@ -94,28 +94,36 @@ function clearButtons() {
 
 function createEditFields(parent) {
     let checkBox = parent.querySelector('input[type="checkbox"]');
-    if (checkBox) {
-        parent.querySelector('input[type="checkbox"]').style.display = 'none';
-    }
+
     const txtInput = document.createElement('input');
     txtInput.setAttribute('type', 'text');
     txtInput.setAttribute('id', 'tasktxt');
     txtInput.required = true;
-    txtInput.value = parent.textContent;
-
-    if (checkBox) {
-        parent.childNodes[1].remove();
-    } else {
-        parent.childNodes[0].style.display = 'none';
-    }
 
     const dateInput = document.createElement('input');
     dateInput.setAttribute('type', 'date');
     dateInput.setAttribute('id', 'taskdate');
 
+    
     const submitButton = document.createElement('button');
     submitButton.classList.add('submit-task-btn');
     submitButton.innerHTML = '<i class="fas fa-check-square"></i>';
+
+    if (checkBox) {
+        parent.querySelector('input[type="checkbox"]').style.display = 'none';
+    }
+
+    if (checkBox) {
+        const taskText = parent.querySelector('.task-txt');
+        const taskDate = parent.querySelector('.task-due-date');
+        taskText.style.display = 'none';
+        taskDate.style.display = 'none';
+        txtInput.value = taskText.textContent;
+        dateInput.value = format(new Date(taskDate.textContent), 'yyyy-MM-dd');
+    } else {
+        parent.childNodes[0].style.display = 'none';
+        txtInput.value = parent.textContent;
+    }
 
     txtInput.addEventListener('keyup', (event) => {
         if (event.target.value.trim() != "") {
@@ -136,21 +144,18 @@ function clearEditFields() {
     if (editFields.length == 0) {
         return;
     }
+    const parent = editFields[0].parentNode;
 
-    const mainTask = editFields[0].parentNode.querySelector('h2');
+    const mainTask = parent.querySelector('h2');
     if (mainTask) {
         mainTask.style.display = 'block';
     } else {
-        editFields[0].parentNode.querySelector('input[type="checkbox"]').style.display = 'initial';
+        parent.querySelector('input[type="checkbox"]').style.display = 'initial';
+        parent.querySelector('.task-txt').style.display = 'initial';
+        parent.querySelector('.task-due-date').style.display = 'initial';
     }
 
     editFields.forEach(item => {
-        if (item.type == 'text' && !mainTask) {
-            const txt = document.createTextNode(item.value);
-            item.parentNode.insertBefore(txt, item.nextSibling);
-        } else if (item.type == 'text' && mainTask) {
-            mainTask.textContent = item.value;
-        }
         item.remove();
     });
     document.querySelector('.submit-task-btn').remove();
@@ -176,7 +181,6 @@ function editButtonHandler(event) {
         if (taskTxt.validity.valid) {
             console.log('Submitting ' + subtaskId || taskId);
             PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value});
-            clearEditFields();
         } else {
             console.log('task title cannot be empty');
         }
