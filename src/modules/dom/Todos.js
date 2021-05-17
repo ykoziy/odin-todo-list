@@ -178,9 +178,10 @@ function editButtonHandler(event) {
 
     submitTaskBtn.addEventListener('click', (event) => {
         const taskTxt = document.querySelector('#tasktxt');
+        const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
             console.log('Submitting ' + subtaskId || taskId);
-            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value});
+            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value});
         } else {
             console.log('task title cannot be empty');
         }

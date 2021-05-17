@@ -102,6 +102,7 @@ class App {
             const subtask = task.getSubtask(data.subtaskId);
             if (subtask) {
                 subtask.title = data.txt;
+                subtask.dueDate = (data.due ? parseISO(data.due) : null);
             } else {
                 task.title = data.txt;
             }
