@@ -94,6 +94,20 @@ class App {
         }
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});
     }
+
+    editTaskHandler(msg, data) {
+        const project = this.projects[Number(data.projectId)];
+        if (project.hasTaskId(data.taskId)) {
+            const task = project.getTask(data.taskId);
+            const subtask = task.getSubtask(data.subtaskId);
+            if (subtask) {
+                subtask.title = data.txt;
+            } else {
+                task.title = data.txt;
+            }
+        }    
+        console.log(project);    
+    }
 }
 
 function generateProjects(count) {
@@ -143,8 +157,10 @@ function init() {
     PubSub.subscribe('todayNavClick', app.todayClickHandler);
     PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
+
     PubSub.subscribe('completeTask', (msg, data) => app.completeTaskHandler(msg, data));
     PubSub.subscribe('deleteTask', (msg, data) => app.deleteTaskHandler(msg, data));
+    PubSub.subscribe('editTask', (msg, data) => app.editTaskHandler(msg, data));
 }
 
 export { init };
