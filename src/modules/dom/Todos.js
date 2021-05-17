@@ -184,7 +184,7 @@ function deleteButtonHandler(event) {
     const taskId = event.currentTarget.closest('.task').dataset.id;
     const subtaskId = event.currentTarget.parentElement.dataset.id;
     console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
-    PubSub.publish('deleteTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId});
+    PubSub.publish('deleteTaskClick', {projectId: projectId, taskId: taskId, subtaskId: subtaskId});
 }
 
 function createEditElements(parent) {
