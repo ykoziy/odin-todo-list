@@ -103,6 +103,31 @@ function showAddTaskModal(msg, data) {
     modal.style.display = 'flex';
 }
 
+function showDeleteConfirmationModal(msg, data) {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = markup('Are you sure you want to delete?');
+    modal.querySelector('form').remove();
+
+    const modalBody = modal.querySelector('.modal-content-body');
+
+    const yesButton = document.createElement('button');
+    yesButton.textContent = "Yes";
+    yesButton.addEventListener('click', () => {
+        PubSub.publish('deleteTask', data);
+        hideModal();
+    });
+
+
+    const noButton = document.createElement('button');
+    noButton.textContent = "No";
+    noButton.addEventListener('click', hideModal);
+
+    modalBody.appendChild(yesButton);
+    modalBody.appendChild(noButton);
+
+    modal.style.display = 'flex';
+}
+
 function hideModal() {
     let modal = document.querySelector('.modal');
     modal.innerHTML = '';
@@ -118,6 +143,7 @@ function renderHTML() {
     document.querySelector('body').appendChild(div);
 
     PubSub.subscribe('addProjectClick', showAddProjectModal);
+    PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data));
 
     PubSub.subscribe('addTaskClick', (msg, data) => showAddTaskModal(msg, data));
 }
