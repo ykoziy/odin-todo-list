@@ -26,6 +26,14 @@ export default class Task {
         return this._dueDate;
     }
 
+    set creationDate(creationDate) {
+        this._creationDate = creationDate;
+    }
+
+    get creationDate() {
+        return this._creationDate;
+    }
+
     set isDone(isDone) {
         this._isDone = isDone; 
     }
