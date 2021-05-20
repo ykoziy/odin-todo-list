@@ -1,7 +1,7 @@
 import Task from './Task';
 import Project from './Project';
+import DataStore from './DataStore.js';
 import { isToday, parseISO, format} from 'date-fns';
-import { nanoid } from 'nanoid';
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';
@@ -140,8 +140,14 @@ function generateTasks(mainTaskCount, subTaskCount) {
 }
 
 function init() {
-    let container = document.getElementById("content");
-    const projects = generateProjects(4);
+    const container = document.getElementById("content");
+    let projects;
+
+    if (DataStore.isDatastoreEmpty()) {
+        projects = generateProjects(4);
+    } else {
+        projects = DataStore.getTodoData();
+    }
 
     const app = new App(projects);
 
