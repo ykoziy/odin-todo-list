@@ -38,6 +38,10 @@ export default class Task {
         return this._subTasks;
     }
 
+    set subTasks(subtasks) {
+        this._subTasks = subtasks;
+    }
+
     hasSubtasks() {
         return !(this.subTasks.size == 0);
     }
