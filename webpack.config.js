@@ -12,6 +12,7 @@ module.exports = {
     minimize: true,
     minimizer: [
         new TerserPlugin({
+            extractComments: false,
             terserOptions: {
                 keep_classnames: true
             }
