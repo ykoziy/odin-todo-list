@@ -1,5 +1,6 @@
 import Project from './Project';
 import Task from './Task';
+import { parseISO } from 'date-fns';
 
 export default class DataStore {
     static saveTodoData(data) {
@@ -17,7 +18,7 @@ export default class DataStore {
         localStorage.setItem('todo', JSON.stringify(data, replacer));
     }
 
-    static getProjects(data) {
+    static parseProjects(data) {
         return data.map(item => Object.assign(new Project(), item));
     }
 
@@ -25,6 +26,12 @@ export default class DataStore {
         const newMap = new Map();
         for (const [key, value] of data) {
             const task = Object.assign(new Task(), value);
+            if (task.dueDate) {
+                task.dueDate = parseISO(task.dueDate);
+            }
+            if (task.creationDate) {
+                task.creationDate = parseISO(task.creationDate);
+            }
             if (task.hasSubtasks()) {
                 task.subTasks = this.convertMap(task.subTasks);
             }
@@ -33,7 +40,7 @@ export default class DataStore {
         return newMap;
     }
 
-    static getTasks(data) {
+    static parseTasks(data) {
         for (let i = 0; i < data.length; i++) {
             let projectTasks = data[i].tasks;
             data[i].tasks = this.convertMap(projectTasks);
@@ -51,9 +58,17 @@ export default class DataStore {
         }
 
         const data = JSON.parse(localStorage.getItem('todo'), reviver);
-        let projects = this.getProjects(data);
-        this.getTasks(projects);
-        console.log(projects);
-        return 0;
+        let projects = this.parseProjects(data);
+        this.parseTasks(projects);
+        return projects;
+    }
+
+    static isDatastoreEmpty() {
+        if (localStorage.getItem('todo')) {
+            return false;
+        } else {
+            return true;
+        }
+        
     }
 }
