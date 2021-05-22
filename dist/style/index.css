@@ -191,7 +191,8 @@ h2 {
 }
 
 #add-todo-btn,
-#edit-project-btn {
+#edit-project-btn,
+#delete-project-btn {
     background-color: yellowgreen;
     text-align: center;
     width: 45px;
@@ -203,6 +204,15 @@ h2 {
     font-weight: bold;
     cursor: pointer;
 }
+
+#delete-project-btn {
+    color: red;
+    font-size: 20px;
+    margin-top: 15px;
+    display: none;
+}
+
+
 
 [contenteditable=true] {
     background: rgba(255,255,255,0.5); /* transparent bg */
