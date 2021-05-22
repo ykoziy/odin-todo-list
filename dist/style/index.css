@@ -251,6 +251,10 @@ h2 {
     background: lightgray;
 }
 
+.task-due-date {
+    margin-left: 10px;
+}
+
 .modal {
     background-color: rgba(0, 0, 0, 0.21);
     width: 100%;
