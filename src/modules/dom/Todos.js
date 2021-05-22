@@ -16,10 +16,10 @@ function renderProjectDetails(id, title, description) {
 }
 
 function generateTaskListItem(id, task) {
-    const htmlClass = `${task.isDone ? 'class="subtask done"' : 'class="subtask"'}`;
+    const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
-    return `<li data-id="${id}" ${htmlClass}><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span class='task-txt'>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
+    return `<li data-id="${id}" class="subtask"><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
+            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
 }
 
 function taskMarkup(id, task) {
@@ -143,7 +143,6 @@ function createEditFields(parent) {
 }
 
 function clearEditFields() {
-    console.log('clear edit fields');
     const editFields = document.querySelectorAll('#tasktxt, #taskdate');
 
     if (editFields.length == 0) {
