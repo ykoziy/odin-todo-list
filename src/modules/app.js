@@ -17,6 +17,7 @@ class App {
         console.log('New project added.');
         const proj = new Project(data.name, data.description);
         this.projects.push(proj);
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectsUpdated', this.projects);
     }
     
@@ -34,7 +35,7 @@ class App {
 
         this.projects[data.id].addTask(task);
         project = this.projects[data.id];
-
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectUpdated', {id: data.id, project: project});
     }
 
@@ -54,6 +55,7 @@ class App {
                 task.isDone = !task.isDone;
             }
         }
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});
     }
 
@@ -82,6 +84,7 @@ class App {
         console.log(`Clicked on edit project. Editing ${data.id}`);
         this.projects[data.id].title = data.title;
         this.projects[data.id].description = data.description;
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectsUpdated', this.projects);
     }
 
@@ -91,7 +94,7 @@ class App {
 
         const container = document.getElementById("content");
         renderMainContent(container);
-        
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectsUpdated', this.projects);
     }
 
@@ -102,6 +105,7 @@ class App {
         } else {
             project.deleteTask(data.taskId);
         }
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});
     }
 
@@ -117,6 +121,7 @@ class App {
                 task.title = data.txt;
             }
         }
+        DataStore.saveTodoData(this.projects);
         PubSub.publish('projectUpdated', {id: data.projectId, project: project});   
     }
 }
@@ -155,6 +160,7 @@ function init() {
 
     if (DataStore.isDatastoreEmpty()) {
         projects = generateProjects(4);
+        //DataStore.saveTodoData(projects);
     } else {
         projects = DataStore.getTodoData();
     }
