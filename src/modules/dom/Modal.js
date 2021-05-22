@@ -103,7 +103,7 @@ function showAddTaskModal(msg, data) {
     modal.style.display = 'flex';
 }
 
-function showDeleteConfirmationModal(msg, data) {
+function showDeleteConfirmationModal(msg, data, type) {
     let modal = document.querySelector('.modal');
     modal.innerHTML = markup('Are you sure you want to delete?');
     modal.querySelector('form').remove();
@@ -112,8 +112,13 @@ function showDeleteConfirmationModal(msg, data) {
 
     const yesButton = document.createElement('button');
     yesButton.textContent = "Yes";
+
     yesButton.addEventListener('click', () => {
-        PubSub.publish('deleteTask', data);
+        if (type === 'deleteTask') {
+            PubSub.publish('deleteTask', data);
+        } else if (type === 'deleteProject') {
+            PubSub.publish('deleteProject', data);    
+        }
         hideModal();
     });
 
@@ -125,7 +130,7 @@ function showDeleteConfirmationModal(msg, data) {
     modalBody.appendChild(yesButton);
     modalBody.appendChild(noButton);
 
-    modal.style.display = 'flex';
+    modal.style.display = 'flex';  
 }
 
 function hideModal() {
@@ -143,8 +148,8 @@ function renderHTML() {
     document.querySelector('body').appendChild(div);
 
     PubSub.subscribe('addProjectClick', showAddProjectModal);
-    PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data));
-
+    PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteTask'));
+    PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
     PubSub.subscribe('addTaskClick', (msg, data) => showAddTaskModal(msg, data));
 }
 

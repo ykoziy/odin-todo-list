@@ -87,6 +87,8 @@ class App {
 
     deleteProjectHandler(msg, data) {
         console.log(`Clicked on delete project. Deleting ${data.id}`);
+        this.projects.splice(Number(data.id), 1);
+        PubSub.publish('projectsUpdated', this.projects);
     }
 
     deleteTaskHandler(msg, data) {
@@ -168,7 +170,7 @@ function init() {
     PubSub.subscribe('todayNavClick', app.todayClickHandler);
     PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
-    PubSub.subscribe('deleteProjectClick', (msg, data) => app.deleteProjectHandler(msg, data));
+    PubSub.subscribe('deleteProject', (msg, data) => app.deleteProjectHandler(msg, data));
 
     PubSub.subscribe('completeTask', (msg, data) => app.completeTaskHandler(msg, data));
     PubSub.subscribe('deleteTask', (msg, data) => app.deleteTaskHandler(msg, data));
