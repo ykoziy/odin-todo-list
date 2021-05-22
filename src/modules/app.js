@@ -1,7 +1,7 @@
 import Task from './Task';
 import Project from './Project';
 import DataStore from './DataStore.js';
-import { isToday, parseISO, format} from 'date-fns';
+import { isToday, parseISO} from 'date-fns';
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';

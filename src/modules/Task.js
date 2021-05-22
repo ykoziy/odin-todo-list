@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import { parseISO, format } from 'date-fns';
 
 export default class Task {
     constructor(title, dueDate = null) {

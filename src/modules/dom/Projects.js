@@ -1,4 +1,3 @@
-import Project from '../Project';
 import PubSub from 'pubsub-js';
 
 function updateProjects(msg, data) {
