@@ -109,6 +109,10 @@ function createEditFields(parent) {
     submitButton.classList.add('submit-task-btn');
     submitButton.innerHTML = '<i class="fas fa-check-square"></i>';
 
+    const addSubtaskBtn = document.createElement('button');
+    addSubtaskBtn.classList.add('add-subtask-btn');
+    addSubtaskBtn.innerHTML = '<i class="fas fa-plus-square"></i>';
+
     if (checkBox) {
         parent.querySelector('input[type="checkbox"]').style.display = 'none';
     }
@@ -132,13 +136,14 @@ function createEditFields(parent) {
             submitButton.disabled = true;
         }
     })
-
     parent.insertBefore(txtInput, parent.childNodes[1]);
     parent.insertBefore(dateInput, parent.childNodes[2]);
     parent.insertBefore(submitButton, parent.childNodes[3]);
+    parent.insertBefore(addSubtaskBtn, parent.childNodes[4]);
 }
 
 function clearEditFields() {
+    console.log('clear edit fields');
     const editFields = document.querySelectorAll('#tasktxt, #taskdate');
 
     if (editFields.length == 0) {
@@ -159,6 +164,7 @@ function clearEditFields() {
         item.remove();
     });
     document.querySelector('.submit-task-btn').remove();
+    document.querySelector('.add-subtask-btn').remove();
 }
 
 function editButtonHandler(event) {
@@ -174,6 +180,7 @@ function editButtonHandler(event) {
     createEditFields(listItem);
 
     const submitTaskBtn = listItem.querySelector('.submit-task-btn');
+    const addSubtaskBtn = listItem.querySelector('.add-subtask-btn');
     
 
     submitTaskBtn.addEventListener('click', (event) => {
@@ -185,6 +192,10 @@ function editButtonHandler(event) {
         } else {
             console.log('task title cannot be empty');
         }
+    });
+
+    addSubtaskBtn.addEventListener('click', (event) => {
+        console.log('adding subtask');
     });
 }
 
