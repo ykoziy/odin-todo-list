@@ -46,8 +46,14 @@ function editProjectHandler(event) {
 
 function deleteProjectHandler(event) {
     const projectID = getProjectID();
+    const deleteProjectBtn = document.getElementById('delete-project-btn');
+    const editFields = document.querySelectorAll('.project-title, .project-description');
 
     const data = {id: projectID};
+
+    deleteProjectBtn.style.display = 'none';
+    editFields[0].contentEditable = 'false';
+    editFields[1].contentEditable = 'false';
 
     PubSub.publish('deleteProjectClick', data);
 }
@@ -58,9 +64,16 @@ function addTaskHandler(event) {
 }
 
 function renderHTML(parentElement) {
-    const div = document.createElement('div');
-    div.setAttribute('id', 'main-content');
-    div.innerHTML = markup;
+    let div = document.querySelector('#main-content');
+
+    if (!div) {
+        div = document.createElement('div');
+        div.setAttribute('id', 'main-content');
+        div.innerHTML = markup;
+    } else {
+        div.innerHTML = markup;
+    }
+
 
     div.querySelector('#edit-project-btn').addEventListener('click', editProjectHandler);
     div.querySelector('#delete-project-btn').addEventListener('click', deleteProjectHandler);

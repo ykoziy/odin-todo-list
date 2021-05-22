@@ -88,6 +88,10 @@ class App {
     deleteProjectHandler(msg, data) {
         console.log(`Clicked on delete project. Deleting ${data.id}`);
         this.projects.splice(Number(data.id), 1);
+
+        const container = document.getElementById("content");
+        renderMainContent(container);
+        
         PubSub.publish('projectsUpdated', this.projects);
     }
 
