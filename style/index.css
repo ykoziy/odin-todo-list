@@ -242,7 +242,8 @@ h2 {
 
 .change-task-btn,
 .delete-task-btn,
-.submit-task-btn {
+.submit-task-btn,
+.add-subtask-btn {
     cursor: pointer;
     margin-left: 5px;
     border: 1px solid black;
