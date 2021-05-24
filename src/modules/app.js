@@ -25,7 +25,7 @@ class App {
     addNewTask(msg, data) {
         console.log(`Adding task to the project with id: ${data.id}`);
         const task = new Task(data.title, parseISO(data.duedate));
-    
+        console.log(task);
         if (data.id == null) {
             console.log('project was null, add to the inbox?!?');
             return;
@@ -37,6 +37,16 @@ class App {
         project = this.projects[data.id];
         DataStore.saveTodoData(this.projects);
         PubSub.publish('projectUpdated', {id: data.id, project: project});
+    }
+
+    addNewSubtask(msg, data) {
+        console.log(`Adding subtask to the task with id: ${data.taskID}`);
+        const subtask = new Task(data.title, parseISO(data.duedate));
+        const task = this.projects[data.projectID].getTask(data.taskID);
+        task.addSubtask(subtask);
+        const project = this.projects[data.projectID];
+        DataStore.saveTodoData(this.projects);
+        PubSub.publish('projectUpdated', {id: data.projectID, project: project});        
     }
 
     completeTaskHandler(msg, data) {
@@ -173,6 +183,7 @@ function init() {
 
     PubSub.subscribe('newProject', (msg, data) => app.addNewProject(msg, data));
     PubSub.subscribe('newTask', (msg, data) => app.addNewTask(msg, data));
+    PubSub.subscribe('newSubtask', (msg, data) => app.addNewSubtask(msg, data));
     PubSub.subscribe('getProject', (msg, data) => app.getProject(msg, data));
 
     PubSub.subscribe('inboxNavClick', app.inboxClickHandler);

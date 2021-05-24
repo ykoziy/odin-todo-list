@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+import { format } from 'date-fns';
 
 function markup(title) {
     let markup = `
@@ -28,6 +29,15 @@ function addNewTaskHandler(event, idx) {
     const duedate = event.target.querySelector("#duedate").value;
     const data = {title: title, duedate: duedate, id: idx};
     PubSub.publish('newTask', data);
+    hideModal();
+}
+
+function addNewSubtaskHandler(event, projectID, taskID) {
+    event.preventDefault();
+    const title = event.target.querySelector("#title").value;
+    const duedate = event.target.querySelector("#duedate").value;
+    const data = {title: title, duedate: duedate, projectID: projectID, taskID: taskID};
+    PubSub.publish('newSubtask', data);
     hideModal();
 }
 
@@ -103,6 +113,26 @@ function showAddTaskModal(msg, data) {
     modal.style.display = 'flex';
 }
 
+function showAddSubtaskModal(projectID, taskId) {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = markup('Add Subtask');
+
+    let modalForm = modal.querySelector('form');
+    modalForm.setAttribute('id', 'add-task');
+
+    createAndAppendLabel('title', 'Task title:', modalForm);
+    createAndAppendInput('text', 'title', true, modalForm);
+    createAndAppendLabel('duedate', 'Due date:', modalForm);
+    createAndAppendInput('date', 'duedate', false, modalForm);
+    createAndAppendSubmit('Ok', modalForm);
+
+    modalForm.querySelector('#duedate').value = format(new Date(), 'yyyy-MM-dd');
+
+    modalForm.addEventListener('submit', (event) => (addNewSubtaskHandler(event, projectID, taskId)));
+
+    modal.style.display = 'flex';  
+}
+
 function showDeleteConfirmationModal(msg, data, type) {
     let modal = document.querySelector('.modal');
     modal.innerHTML = markup('Are you sure you want to delete?');
@@ -153,4 +183,4 @@ function renderHTML() {
     PubSub.subscribe('addTaskClick', (msg, data) => showAddTaskModal(msg, data));
 }
 
-export { renderHTML };
+export { renderHTML, showAddSubtaskModal };
