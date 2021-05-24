@@ -1,6 +1,6 @@
 import {renderHTML as renderTodos} from './Todos';
 import {renderHTML as renderAside} from './Aside';
-import { showAddTaskModal } from './Modal';
+import { showAddTaskModal, showDeleteConfirmationModal } from './Modal';
 import PubSub from 'pubsub-js';
 
 const markup = `
@@ -55,8 +55,7 @@ function deleteProjectHandler(event) {
     deleteProjectBtn.style.display = 'none';
     editFields[0].contentEditable = 'false';
     editFields[1].contentEditable = 'false';
-
-    PubSub.publish('deleteProjectClick', data);
+    showDeleteConfirmationModal(data, 'deleteProject');
 }
 
 function addTaskHandler(event) {

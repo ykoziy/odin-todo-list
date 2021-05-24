@@ -176,8 +176,6 @@ function renderHTML() {
     div.addEventListener('mousedown', clickOutsideModalHandler);
 
     document.querySelector('body').appendChild(div);
-
-    //PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
 }
 
 export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal, showDeleteConfirmationModal };
