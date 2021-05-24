@@ -1,4 +1,4 @@
-import { showAddSubtaskModal } from './Modal';
+import { showAddSubtaskModal, showDeleteConfirmationModal } from './Modal';
 import { format } from 'date-fns';
 
 const markup = `
@@ -203,7 +203,7 @@ function deleteButtonHandler(event) {
     const taskId = event.currentTarget.closest('.task').dataset.id;
     const subtaskId = event.currentTarget.parentElement.dataset.id;
     console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
-    PubSub.publish('deleteTaskClick', {projectId: projectId, taskId: taskId, subtaskId: subtaskId});
+    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId}, 'deleteTask');
 }
 
 function createEditElements(parent) {

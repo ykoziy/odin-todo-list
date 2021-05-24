@@ -133,7 +133,7 @@ function showAddSubtaskModal(projectID, taskId) {
     modal.style.display = 'flex';  
 }
 
-function showDeleteConfirmationModal(msg, data, type) {
+function showDeleteConfirmationModal(data, type) {
     let modal = document.querySelector('.modal');
     modal.innerHTML = markup('Are you sure you want to delete?');
     modal.querySelector('form').remove();
@@ -177,8 +177,7 @@ function renderHTML() {
 
     document.querySelector('body').appendChild(div);
 
-    PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteTask'));
-    PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
+    //PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
 }
 
-export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal };
+export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal, showDeleteConfirmationModal };
