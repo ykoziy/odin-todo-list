@@ -1,5 +1,6 @@
 import {renderHTML as renderNav} from './Nav';
 import {renderHTML as renderProjects} from './Projects';
+import { showAddProjectModal } from './Modal';
 import PubSub from 'pubsub-js';
 
 function generateMarkup(projects) {
@@ -14,7 +15,7 @@ function generateMarkup(projects) {
 
 
 function newProjectHandler(event) {
-    PubSub.publish('addProjectClick', null);
+    showAddProjectModal();
 }
 
 function navHandler(event) {

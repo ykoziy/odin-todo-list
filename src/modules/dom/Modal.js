@@ -177,9 +177,8 @@ function renderHTML() {
 
     document.querySelector('body').appendChild(div);
 
-    PubSub.subscribe('addProjectClick', showAddProjectModal);
     PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteTask'));
     PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
 }
 
-export { renderHTML, showAddSubtaskModal, showAddTaskModal };
+export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal };
