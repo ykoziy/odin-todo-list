@@ -1,5 +1,6 @@
 import {renderHTML as renderTodos} from './Todos';
 import {renderHTML as renderAside} from './Aside';
+import { showAddTaskModal } from './Modal';
 import PubSub from 'pubsub-js';
 
 const markup = `
@@ -60,7 +61,7 @@ function deleteProjectHandler(event) {
 
 function addTaskHandler(event) {
     const projectID = getProjectID();
-    PubSub.publish('addTaskClick', projectID);
+    showAddTaskModal(projectID);
 }
 
 function renderHTML(parentElement) {

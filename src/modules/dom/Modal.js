@@ -23,11 +23,11 @@ function addNewProjectHandler(event) {
     hideModal();
 }
 
-function addNewTaskHandler(event, idx) {
+function addNewTaskHandler(event, projectID) {
     event.preventDefault();
     const title = event.target.querySelector("#title").value;
     const duedate = event.target.querySelector("#duedate").value;
-    const data = {title: title, duedate: duedate, id: idx};
+    const data = {title: title, duedate: duedate, id: projectID};
     PubSub.publish('newTask', data);
     hideModal();
 }
@@ -95,7 +95,7 @@ function showAddProjectModal() {
     modal.style.display = 'flex';
 }
 
-function showAddTaskModal(msg, data) {
+function showAddTaskModal(projectID) {
     let modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Task');
 
@@ -108,7 +108,7 @@ function showAddTaskModal(msg, data) {
     createAndAppendInput('date', 'duedate', false, modalForm);
     createAndAppendSubmit('Ok', modalForm);
 
-    modalForm.addEventListener('submit', (event) => (addNewTaskHandler(event, data)));
+    modalForm.addEventListener('submit', (event) => (addNewTaskHandler(event, projectID)));
 
     modal.style.display = 'flex';
 }
@@ -180,7 +180,6 @@ function renderHTML() {
     PubSub.subscribe('addProjectClick', showAddProjectModal);
     PubSub.subscribe('deleteTaskClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteTask'));
     PubSub.subscribe('deleteProjectClick', (msg, data) => showDeleteConfirmationModal(msg, data, 'deleteProject'));
-    PubSub.subscribe('addTaskClick', (msg, data) => showAddTaskModal(msg, data));
 }
 
-export { renderHTML, showAddSubtaskModal };
+export { renderHTML, showAddSubtaskModal, showAddTaskModal };
