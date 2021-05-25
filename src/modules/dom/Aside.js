@@ -16,7 +16,7 @@ const markup = `
     </div>
 `;
 
-function renderHTML(parentElement) {
+function renderHTML() {
     return markup;
 }
 

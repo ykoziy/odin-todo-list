@@ -183,7 +183,7 @@ function editButtonHandler(event) {
     const addSubtaskBtn = listItem.querySelector('.add-subtask-btn');
     
 
-    submitTaskBtn.addEventListener('click', (event) => {
+    submitTaskBtn.addEventListener('click', () => {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
@@ -193,7 +193,7 @@ function editButtonHandler(event) {
         }
     });
 
-    addSubtaskBtn.addEventListener('click', (event) => {
+    addSubtaskBtn.addEventListener('click', () => {
         showAddSubtaskModal(projectId, taskId);
     });
 }
@@ -269,7 +269,7 @@ function renderProjectItem(msg, data) {
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));
 }
 
-function renderHTML(parentElement) {
+function renderHTML() {
     PubSub.subscribe('returnProject', (msg, data) => renderProjectItem(msg, data));
     PubSub.subscribe('projectUpdated', (msg, data) => renderProjectItem(msg, data));
     return markup;

@@ -14,7 +14,7 @@ function getProjectID() {
     return titleH1.dataset.idx;
 }
 
-function editProjectHandler(event) {
+function editProjectHandler() {
     const projectID = getProjectID();
 
     const editFields = document.querySelectorAll('.project-title, .project-description');
@@ -45,7 +45,7 @@ function editProjectHandler(event) {
     }
 }
 
-function deleteProjectHandler(event) {
+function deleteProjectHandler() {
     const projectID = getProjectID();
     const deleteProjectBtn = document.getElementById('delete-project-btn');
     const editFields = document.querySelectorAll('.project-title, .project-description');
@@ -58,7 +58,7 @@ function deleteProjectHandler(event) {
     showDeleteConfirmationModal(data, 'deleteProject');
 }
 
-function addTaskHandler(event) {
+function addTaskHandler() {
     const projectID = getProjectID();
     showAddTaskModal(projectID);
 }
