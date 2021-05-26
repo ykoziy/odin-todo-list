@@ -16,11 +16,14 @@ function renderProjectDetails(id, title, description) {
     `;
 }
 
-function generateFilterListItem(parentID, taskID, task) {
+function generateFilterListItem(projectID, parentID, taskID, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
-    return `<li data-parentid="${parentID}" data-taskid="${taskID}" ><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
+    return `<li data-projectid="${projectID}" data-parentid="${parentID}" data-taskid="${taskID}" >
+            <input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
+            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>
+            <div class="edit-task-btn">...</div>
+            </li>`;
 }
 
 function generateTaskListItem(id, task) {
@@ -94,7 +97,8 @@ function handleTodoClick(event, projectId) {
 }
 
 function clearButtons() {
-    const icons = document.querySelector('.project-todos').querySelectorAll('button');
+    const element = document.querySelector('.project-todos') || document.querySelector('#filter-todos');
+    const icons = element.querySelectorAll('button');
     icons.forEach(item => {
         item.remove();
     });
@@ -176,9 +180,17 @@ function clearEditFields() {
 
 function editButtonHandler(event) {
     const parentElement = event.currentTarget.parentNode;
-    const projectId = document.querySelector('.project-title').dataset.idx;
-    const taskId = parentElement.closest('.task').dataset.id;
-    const subtaskId = parentElement.dataset.id;
+    const filter = document.getElementById('filter-todos');
+    let projectId, taskId, subtaskId;
+    if (filter) {
+        projectId = parentElement.dataset.projectid;
+        taskId = parentElement.dataset.parentid;
+        subtaskId = parentElement.dataset.taskid;
+    } else {
+        projectId = document.querySelector('.project-title').dataset.idx;
+        taskId = parentElement.closest('.task').dataset.id;
+        subtaskId = parentElement.dataset.id;        
+    }
     const listItem = parentElement;
     
     console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
@@ -206,9 +218,18 @@ function editButtonHandler(event) {
 }
 
 function deleteButtonHandler(event) {
-    const projectId = document.querySelector('.project-title').dataset.idx;
-    const taskId = event.currentTarget.closest('.task').dataset.id;
-    const subtaskId = event.currentTarget.parentElement.dataset.id;
+    const filter = document.getElementById('filter-todos');
+    let projectId, taskId, subtaskId;
+    if (filter) {
+        let li = event.currentTarget.closest('li');
+        projectId = li.dataset.projectid;
+        taskId = li.dataset.parentid;
+        subtaskId = li.dataset.taskid;
+    } else {
+        projectId = document.querySelector('.project-title').dataset.idx;
+        taskId = event.currentTarget.closest('.task').dataset.id;
+        subtaskId = event.currentTarget.parentElement.dataset.id;     
+    }    
     console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
     showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId}, 'deleteTask');
 }
@@ -276,19 +297,54 @@ function renderProjectItem(msg, data) {
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));
 }
 
+function editFilterTaskHandler(event) {
+    const task = event.target.parentElement;
+
+    if (EDIT) {
+        clearEditFields();
+        clearButtons();
+        EDIT = false;
+        return;
+    }
+
+    createEditElements(task);
+
+    EDIT = true;
+}
+
+// ! Bug: after clicking project is displayed....
+function handleFilteredTodoClick(event) {
+    let targetNode = event.target;
+    const nodeName = targetNode.nodeName.toLowerCase();
+    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox' || nodeName == 'span') {
+        if (targetNode.type == 'checkbox') {
+            targetNode = event.target.parentElement;
+        }
+        const li = targetNode.closest('li');
+        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectId: li.dataset.projectid});
+    }
+}
+
 function renderFilteredTasks(msg, data) {
+    EDIT = false;
     let div = document.querySelector('#main-todos');
     div.innerHTML = '';
 
     const mainDivMarkup = `
         <div id="filter-todos">
             <ul>
-            ${data.map(item => generateFilterListItem(item.parentID, item.taskID, item.task)).join('')}                             
+            ${data.map(item => generateFilterListItem(item.projectID, item.parentID, item.taskID, item.task)).join('')}                             
             </ul>
         </div>                   
     `;
 
     div.innerHTML = mainDivMarkup;
+
+    const todos = div.querySelector('#filter-todos');
+    todos.addEventListener('click', event => handleFilteredTodoClick(event));
+
+    const editBtns = div.querySelectorAll('.edit-task-btn');
+    editBtns.forEach(item => item.addEventListener('click', editFilterTaskHandler));    
 }
 
 function renderHTML() {
