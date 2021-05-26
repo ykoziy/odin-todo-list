@@ -147,6 +147,16 @@ h2 {
     padding-right: 30px;
 }
 
+#filter-todos li {
+    display: flex;
+    align-items: center;
+}
+
+#filter-todos .edit-task-btn {
+    display: flex;
+    margin-left: auto;
+}
+
 .project-details {
     display: flex;
     flex-direction: column;
@@ -233,7 +243,7 @@ h2 {
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;   
-    display: inline;
+    display: inline-block;
 }
 
 .submit-task-btn {
