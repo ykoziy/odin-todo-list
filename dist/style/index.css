@@ -233,6 +233,7 @@ h2 {
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;   
+    display: inline;
 }
 
 .submit-task-btn {
