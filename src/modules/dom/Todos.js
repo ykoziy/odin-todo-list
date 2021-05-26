@@ -251,8 +251,8 @@ function createEditElements(parent) {
         title.appendChild(editButton);
         title.appendChild(deleteButton);
     } else {
-        parent.appendChild(editButton);
-        parent.appendChild(deleteButton);
+        parent.insertBefore(editButton, parent.childNodes[5]);
+        parent.insertBefore(deleteButton, parent.childNodes[6]);
     }
 }
 
@@ -260,7 +260,6 @@ function createEditElements(parent) {
 function editTaskHandler(event) {
     const taskElement = event.target.closest('.task');
     const subTasks = taskElement.querySelectorAll('li');
-    const taskId = taskElement.dataset.id;
 
     if (EDIT) {
         clearEditFields();
