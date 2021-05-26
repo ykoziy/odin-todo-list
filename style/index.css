@@ -142,6 +142,11 @@ h2 {
     word-break:break-word;
 }
 
+#filter-todos {
+    margin-top: 60px;
+    padding-right: 30px;
+}
+
 .project-details {
     display: flex;
     flex-direction: column;
