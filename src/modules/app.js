@@ -1,7 +1,7 @@
 import Task from './Task';
 import Project from './Project';
 import DataStore from './DataStore.js';
-import { isToday, parseISO} from 'date-fns';
+import { isToday, isThisWeek, parseISO, startOfYesterday, isWithinInterval} from 'date-fns';
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';
@@ -74,20 +74,58 @@ class App {
         PubSub.publish('returnProject', data);
     }
     
+    filterTasks(func) {
+        const result = [];
+        for (let i = 0; i < this.projects.length; i++) {
+            const project = this.projects[i];
+            const title = project.title;
+            if (project.tasks.size > 0) {
+                for (const item of project.tasks) {
+                    const task = item[1];
+                    if (func(task)) {
+                        result.push({projectID: i, parentID: null, taskID: item[0], task: task});
+                    }
+                    for (const sub of task.subTasks) {
+                        const subtask = sub[1];
+                        if (func(subtask)) {
+                            result.push({projectID: i, parentID: item[0], taskID: sub[0], task: subtask});
+                        }                        
+                    }
+                }
+            }
+        }
+        return result;
+    }    
+
     inboxClickHandler() {
         console.log('inbox clicked');
+        //! get the projects created today and yesterday...
+        const data = this.filterTasks((task) => {
+            return isWithinInterval(task.creationDate, {
+                start: startOfYesterday(),
+                end: new Date()
+            });
+        });
+        PubSub.publish('filterTodos', data); 
     }
     
     upcomingClickHandler() {
         console.log('upcoming clicked');
+        const data = this.filterTasks((task) => {
+            return isThisWeek(task.dueDate);
+        });
+        PubSub.publish('filterTodos', data);     
     }
-    
+
     todayClickHandler() {
-        console.log('today clicked');
+        const data = this.filterTasks((task) => {
+            return isToday(task.dueDate);
+        });
+        PubSub.publish('filterTodos', data);
     }
     
     urgentClickHandler() {
-        console.log('urgent clicked');
+        console.log('urgent clicked, inop');
     }
     
     editProjectHandler(msg, data) {
@@ -186,10 +224,11 @@ function init() {
     PubSub.subscribe('newSubtask', (msg, data) => app.addNewSubtask(msg, data));
     PubSub.subscribe('getProject', (msg, data) => app.getProject(msg, data));
 
-    PubSub.subscribe('inboxNavClick', app.inboxClickHandler);
-    PubSub.subscribe('upcomingNavClick', app.upcomingClickHandler);
-    PubSub.subscribe('todayNavClick', app.todayClickHandler);
-    PubSub.subscribe('urgentNavClick', app.urgentClickHandler);
+    PubSub.subscribe('inboxNavClick', () => app.inboxClickHandler());
+    PubSub.subscribe('upcomingNavClick', () => app.upcomingClickHandler());
+    PubSub.subscribe('todayNavClick', () => app.todayClickHandler());
+    PubSub.subscribe('urgentNavClick', () => app.urgentClickHandler());
+
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
     PubSub.subscribe('deleteProject', (msg, data) => app.deleteProjectHandler(msg, data));
 

@@ -16,6 +16,13 @@ function renderProjectDetails(id, title, description) {
     `;
 }
 
+function generateFilterListItem(parentID, taskID, task) {
+    const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
+    const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
+    return `<li data-parentid="${parentID}" data-taskid="${taskID}" ><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
+            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
+}
+
 function generateTaskListItem(id, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
@@ -269,9 +276,25 @@ function renderProjectItem(msg, data) {
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));
 }
 
+function renderFilteredTasks(msg, data) {
+    let div = document.querySelector('#main-todos');
+    div.innerHTML = '';
+
+    const mainDivMarkup = `
+        <div id="filter-todos">
+            <ul>
+            ${data.map(item => generateFilterListItem(item.parentID, item.taskID, item.task)).join('')}                             
+            </ul>
+        </div>                   
+    `;
+
+    div.innerHTML = mainDivMarkup;
+}
+
 function renderHTML() {
     PubSub.subscribe('returnProject', (msg, data) => renderProjectItem(msg, data));
     PubSub.subscribe('projectUpdated', (msg, data) => renderProjectItem(msg, data));
+    PubSub.subscribe('filterTodos', (msg, data) => renderFilteredTasks(msg, data));
     return markup;
 }
 
