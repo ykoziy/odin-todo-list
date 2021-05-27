@@ -206,7 +206,7 @@ function editButtonHandler(event) {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
-            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value});
+            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value, filter: filter.dataset.filter});
         } else {
             console.log('task title cannot be empty');
         }
@@ -231,7 +231,7 @@ function deleteButtonHandler(event) {
         subtaskId = event.currentTarget.parentElement.dataset.id;     
     }    
     console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
-    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId}, 'deleteTask');
+    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId, filter: filter.dataset.filter}, 'deleteTask');
 }
 
 function createEditElements(parent) {
@@ -320,7 +320,8 @@ function handleFilteredTodoClick(event) {
             targetNode = event.target.parentElement;
         }
         const li = targetNode.closest('li');
-        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectId: li.dataset.projectid});
+        const filter = document.getElementById('filter-todos');
+        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectId: li.dataset.projectid, filter: filter.dataset.filter});
     }
 }
 
@@ -330,9 +331,9 @@ function renderFilteredTasks(msg, data) {
     div.innerHTML = '';
 
     const mainDivMarkup = `
-        <div id="filter-todos">
+        <div id="filter-todos" data-filter="${data.filter}">
             <ul>
-            ${data.map(item => generateFilterListItem(item.projectID, item.parentID, item.taskID, item.task)).join('')}                             
+            ${data.dt.map(item => generateFilterListItem(item.projectID, item.parentID, item.taskID, item.task)).join('')}                             
             </ul>
         </div>                   
     `;

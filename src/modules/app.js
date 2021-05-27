@@ -13,6 +13,27 @@ class App {
         this.projects = projects;
     }
 
+    updateProject(id, project, filter) {
+        if (filter) {
+            switch (filter) {
+                case 'inbox':
+                    PubSub.publish('inboxNavClick', null);
+                    break;
+                case 'upcoming':
+                    PubSub.publish('upcomingNavClick', null);
+                    break;
+                case 'today':
+                    PubSub.publish('todayNavClick', null);
+                    break;
+                case 'urgent':
+                    PubSub.publish('urgentNavClick', null);
+                    break;
+            }
+        } else {
+            PubSub.publish('projectUpdated', {id: id, project: project});
+        }
+    }
+
     addNewProject(msg, data) {
         console.log('New project added.');
         const proj = new Project(data.name, data.description);
@@ -36,7 +57,7 @@ class App {
         this.projects[data.id].addTask(task);
         project = this.projects[data.id];
         DataStore.saveTodoData(this.projects);
-        PubSub.publish('projectUpdated', {id: data.id, project: project});
+        this.updateProject(data.projectId, project, data.filter);
     }
 
     addNewSubtask(msg, data) {
@@ -46,7 +67,7 @@ class App {
         task.addSubtask(subtask);
         const project = this.projects[data.projectID];
         DataStore.saveTodoData(this.projects);
-        PubSub.publish('projectUpdated', {id: data.projectID, project: project});        
+        this.updateProject(data.projectId, project, data.filter);       
     }
 
     completeTaskHandler(msg, data) {
@@ -66,7 +87,7 @@ class App {
             }
         }
         DataStore.saveTodoData(this.projects);
-        PubSub.publish('projectUpdated', {id: data.projectId, project: project});
+        this.updateProject(data.projectId, project, data.filter);
     }
 
     getProject(msg, idx) {
@@ -98,7 +119,6 @@ class App {
     }    
 
     inboxClickHandler() {
-        console.log('inbox clicked');
         //! get the projects created today and yesterday...
         const data = this.filterTasks((task) => {
             return isWithinInterval(task.creationDate, {
@@ -106,22 +126,21 @@ class App {
                 end: new Date()
             });
         });
-        PubSub.publish('filterTodos', data); 
+        PubSub.publish('filterTodos', {dt: data, filter: 'inbox'});
     }
     
     upcomingClickHandler() {
-        console.log('upcoming clicked');
         const data = this.filterTasks((task) => {
             return isThisWeek(task.dueDate);
         });
-        PubSub.publish('filterTodos', data);     
+        PubSub.publish('filterTodos', {dt: data, filter: 'upcoming'});    
     }
 
     todayClickHandler() {
         const data = this.filterTasks((task) => {
             return isToday(task.dueDate);
         });
-        PubSub.publish('filterTodos', data);
+        PubSub.publish('filterTodos', {dt: data, filter: 'today'});
     }
     
     urgentClickHandler() {
@@ -154,7 +173,7 @@ class App {
             project.deleteTask(data.taskId);
         }
         DataStore.saveTodoData(this.projects);
-        PubSub.publish('projectUpdated', {id: data.projectId, project: project});
+        this.updateProject(data.projectId, project, data.filter);
     }
 
     editTaskHandler(msg, data) {
@@ -170,7 +189,7 @@ class App {
             }
         }
         DataStore.saveTodoData(this.projects);
-        PubSub.publish('projectUpdated', {id: data.projectId, project: project});   
+        this.updateProject(data.projectId, project, data.filter);   
     }
 }
 
