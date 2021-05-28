@@ -182,11 +182,13 @@ function clearEditFields() {
 function editButtonHandler(event) {
     const parentElement = event.currentTarget.parentNode;
     const filter = document.getElementById('filter-todos');
+    let filterType = null;
     let projectId, taskId, subtaskId;
     if (filter) {
         projectId = parentElement.dataset.projectid;
-        taskId = parentElement.dataset.parentid;
-        subtaskId = parentElement.dataset.taskid;
+        taskId = parentElement.dataset.taskid;
+        subtaskId = parentElement.dataset.subtaskid;
+        filterType = filter.dataset.filter;
     } else {
         projectId = document.querySelector('.project-title').dataset.idx;
         taskId = parentElement.closest('.task').dataset.id;
@@ -207,7 +209,7 @@ function editButtonHandler(event) {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
-            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value, filter: filter.dataset.filter});
+            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value, filter: filterType});
         } else {
             console.log('task title cannot be empty');
         }
