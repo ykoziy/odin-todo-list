@@ -329,7 +329,7 @@ function handleFilteredTodoClick(event) {
         }
         const li = targetNode.closest('li');
         const filter = document.getElementById('filter-todos');
-        PubSub.publish('completeTask', {taskID: Number(li.dataset.taskid), subtaskID: li.dataset.subtaskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
+        PubSub.publish('completeTask', {taskID: li.dataset.taskid, subtaskID: li.dataset.subtaskid, projectID: Number(li.dataset.projectid), filter: filter.dataset.filter});
     }
 }
 
