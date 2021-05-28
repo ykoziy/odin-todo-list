@@ -46,7 +46,6 @@ class App {
     addNewTask(msg, data) {
         console.log(`Adding task to the project with id: ${data.id}`);
         const task = new Task(data.title, parseISO(data.duedate));
-        console.log(task);
         if (data.id == null) {
             console.log('project was null, add to the inbox?!?');
             return;
@@ -223,10 +222,10 @@ function generateTasks(mainTaskCount, subTaskCount) {
 
 function init() {
     const container = document.getElementById("content");
-    let projects;
+    let projects = [new Project('Todos', 'Tasks created without a projects get stored here.')];
 
     if (DataStore.isDatastoreEmpty()) {
-        projects = generateProjects(4);
+        projects.push(...generateProjects(4));
         //DataStore.saveTodoData(projects);
     } else {
         projects = DataStore.getTodoData();

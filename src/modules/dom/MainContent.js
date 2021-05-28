@@ -17,6 +17,10 @@ function getProjectID() {
 function editProjectHandler() {
     const projectID = getProjectID();
 
+    if (projectID === '0') {
+        return;
+    }
+
     const editFields = document.querySelectorAll('.project-title, .project-description');
 
     const deleteProjectBtn = document.getElementById('delete-project-btn');
