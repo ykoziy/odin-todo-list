@@ -167,7 +167,6 @@ class App {
 
     deleteTaskHandler(msg, data) {
         const project = this.projects[data.projectId];
-        console.log(data);
         if (data.subtaskId) {
             project.getTask(data.taskId).deleteSubtask(data.subtaskId);
         } else {

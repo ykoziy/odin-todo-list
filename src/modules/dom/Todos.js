@@ -136,7 +136,10 @@ function createEditFields(parent) {
         taskText.style.display = 'none';
         taskDate.style.display = 'none';
         txtInput.value = taskText.textContent;
-        dateInput.value = format(new Date(taskDate.textContent), 'yyyy-MM-dd');
+        if (taskDate.textContent) {
+            dateInput.value = format(new Date(taskDate.textContent),  'yyyy-MM-dd');
+        }
+
     } else {
         parent.childNodes[0].style.display = 'none';
         txtInput.value = parent.textContent;
