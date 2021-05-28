@@ -91,7 +91,11 @@ function handleTodoClick(event, projectID) {
         if (targetNode.type == 'checkbox') {
             targetNode = event.target.parentElement;
         }
-        const subtaskID = targetNode.closest('.subtask').dataset.id;
+        const subtaskElement = targetNode.closest('.subtask');
+        let subtaskID = null;
+        if (subtaskElement) {
+            subtaskID = subtaskElement.dataset.id;
+        }
         const taskID = targetNode.closest('.task').dataset.id;
         PubSub.publish('completeTask', {taskID: taskID, subtaskID: subtaskID, projectID: projectID});
     }
