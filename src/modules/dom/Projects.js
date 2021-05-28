@@ -7,7 +7,7 @@ function updateProjects(msg, data) {
 }
 
 function updateProjectProgress(msg, data) {
-    const div = document.querySelector(`li[data-idx="${data.id}"] div`);
+    const div = document.querySelector(`li[data-idx="${data.projectID}"] div`);
     div.style.cssText = setProgress(data.project.getPercentComplete());
 }
 

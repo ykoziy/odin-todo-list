@@ -84,16 +84,16 @@ function renderProjectTasks(tasks) {
     return html;
 }
 
-function handleTodoClick(event, projectId) {
+function handleTodoClick(event, projectID) {
     let targetNode = event.target;
     const nodeName = targetNode.nodeName.toLowerCase();
     if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox' || nodeName == 'span') {
         if (targetNode.type == 'checkbox') {
             targetNode = event.target.parentElement;
         }
-        const subtaskId = targetNode.closest('.subtask').dataset.id;
-        const taskId = targetNode.closest('.task').dataset.id;
-        PubSub.publish('completeTask', {taskId: taskId, subtaskId: subtaskId, projectId: projectId});
+        const subtaskID = targetNode.closest('.subtask').dataset.id;
+        const taskID = targetNode.closest('.task').dataset.id;
+        PubSub.publish('completeTask', {taskID: taskID, subtaskID: subtaskID, projectID: projectID});
     }
 }
 
@@ -186,20 +186,20 @@ function editButtonHandler(event) {
     const parentElement = event.currentTarget.parentNode;
     const filter = document.getElementById('filter-todos');
     let filterType = null;
-    let projectId, taskId, subtaskId;
+    let projectID, taskID, subtaskID;
     if (filter) {
-        projectId = parentElement.dataset.projectid;
-        taskId = parentElement.dataset.taskid;
-        subtaskId = parentElement.dataset.subtaskid;
+        projectID = parentElement.dataset.projectid;
+        taskID = parentElement.dataset.taskid;
+        subtaskID = parentElement.dataset.subtaskid;
         filterType = filter.dataset.filter;
     } else {
-        projectId = document.querySelector('.project-title').dataset.idx;
-        taskId = parentElement.closest('.task').dataset.id;
-        subtaskId = parentElement.dataset.id;        
+        projectID = document.querySelector('.project-title').dataset.idx;
+        taskID = parentElement.closest('.task').dataset.id;
+        subtaskID = parentElement.dataset.id;        
     }
     const listItem = parentElement;
     
-    console.log(`Editing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
+    console.log(`Editing Project id: ${projectID}, Task id: ${taskID}, Subtask id: ${subtaskID}`);
 
     clearEditFields();
     createEditFields(listItem);
@@ -212,7 +212,7 @@ function editButtonHandler(event) {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
-            PubSub.publish('editTask', {projectId: projectId, taskId: taskId, subtaskId: subtaskId, txt: taskTxt.value, due: taskDate.value, filter: filterType});
+            PubSub.publish('editTask', {projectID: projectID, taskID: taskID, subtaskID: subtaskID, txt: taskTxt.value, due: taskDate.value, filter: filterType});
         } else {
             console.log('task title cannot be empty');
         }
@@ -225,21 +225,21 @@ function editButtonHandler(event) {
 
 function deleteButtonHandler(event) {
     const filter = document.getElementById('filter-todos');
-    let projectId, taskId, subtaskId;
+    let projectID, taskID, subtaskID;
     let filterType = null;
     if (filter) {
         let li = event.currentTarget.closest('li');
-        projectId = li.dataset.projectid;
-        taskId = li.dataset.taskid;
-        subtaskId = li.dataset.subtaskid;
+        projectID = li.dataset.projectid;
+        taskID = li.dataset.taskid;
+        subtaskID = li.dataset.subtaskid;
         filterType = filter.dataset.filter;
     } else {
-        projectId = document.querySelector('.project-title').dataset.idx;
-        taskId = event.currentTarget.closest('.task').dataset.id;
-        subtaskId = event.currentTarget.parentElement.dataset.id;     
+        projectID = document.querySelector('.project-title').dataset.idx;
+        taskID = event.currentTarget.closest('.task').dataset.id;
+        subtaskID = event.currentTarget.parentElement.dataset.id;     
     }    
-    console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
-    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId, filter: filterType}, 'deleteTask');
+    console.log(`Deleteing Project id: ${projectID}, Task id: ${taskID}, Subtask id: ${subtaskID}`);
+    showDeleteConfirmationModal({projectID: projectID, taskID: taskID, subtaskID: subtaskID, filter: filterType}, 'deleteTask');
 }
 
 function createEditElements(parent) {
@@ -289,7 +289,7 @@ function renderProjectItem(msg, data) {
     let projectItem = data.project;
     let div = document.querySelector('#main-todos');
     let html = `
-        ${renderProjectDetails(data.id, projectItem.title, projectItem.description)}
+        ${renderProjectDetails(data.projectID, projectItem.title, projectItem.description)}
         <div class="project-todos">
         ${renderProjectTasks(projectItem.tasks)}
         </div>
@@ -329,7 +329,7 @@ function handleFilteredTodoClick(event) {
         }
         const li = targetNode.closest('li');
         const filter = document.getElementById('filter-todos');
-        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectId: li.dataset.projectid, filter: filter.dataset.filter});
+        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
     }
 }
 

@@ -13,7 +13,7 @@ class App {
         this.projects = projects;
     }
 
-    updateProject(id, project, filter) {
+    updateProject(projectID, project, filter) {
         if (filter) {
             switch (filter) {
                 case 'inbox':
@@ -30,7 +30,7 @@ class App {
                     break;
             }
         } else {
-            PubSub.publish('projectUpdated', {id: id, project: project});
+            PubSub.publish('projectUpdated', {projectID: projectID, project: project});
         }
     }
 
@@ -64,14 +64,14 @@ class App {
         task.addSubtask(subtask);
         const project = this.projects[data.projectID];
         DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectId, project, data.filter);       
+        this.updateProject(data.projectID, project, data.filter);       
     }
 
     completeTaskHandler(msg, data) {
-        const project = this.projects[Number(data.projectId)];
-        if (project.hasTaskId(data.taskId)) {
-            const task = project.getTask(data.taskId);
-            const subtask = task.getSubtask(data.subtaskId);
+        const project = this.projects[Number(data.projectID)];
+        if (project.hasTaskId(data.taskID)) {
+            const task = project.getTask(data.taskID);
+            const subtask = task.getSubtask(data.subtaskID);
             if (subtask) {
                 subtask.isDone = !subtask.isDone;
                 if (task.areSubtasksDone()) {
@@ -84,11 +84,11 @@ class App {
             }
         }
         DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectId, project, data.filter);
+        this.updateProject(data.projectID, project, data.filter);
     }
 
     getProject(msg, idx) {
-        const data = {id:idx, project:this.projects[idx]};
+        const data = {projectID:idx, project:this.projects[idx]};
         PubSub.publish('returnProject', data);
     }
     
@@ -145,16 +145,16 @@ class App {
     }
     
     editProjectHandler(msg, data) {
-        console.log(`Clicked on edit project. Editing ${data.id}`);
-        this.projects[data.id].title = data.title;
-        this.projects[data.id].description = data.description;
+        console.log(`Clicked on edit project. Editing ${data.projectID}`);
+        this.projects[data.projectID].title = data.title;
+        this.projects[data.projectID].description = data.description;
         DataStore.saveTodoData(this.projects);
         PubSub.publish('projectsUpdated', this.projects);
     }
 
     deleteProjectHandler(msg, data) {
-        console.log(`Clicked on delete project. Deleting ${data.id}`);
-        this.projects.splice(Number(data.id), 1);
+        console.log(`Clicked on delete project. Deleting ${data.projectID}`);
+        this.projects.splice(Number(data.projectID), 1);
 
         const container = document.getElementById("content");
         renderMainContent(container);
@@ -163,21 +163,21 @@ class App {
     }
 
     deleteTaskHandler(msg, data) {
-        const project = this.projects[data.projectId];
-        if (data.subtaskId) {
-            project.getTask(data.taskId).deleteSubtask(data.subtaskId);
+        const project = this.projects[data.projectID];
+        if (data.subtaskID) {
+            project.getTask(data.taskID).deleteSubtask(data.subtaskID);
         } else {
-            project.deleteTask(data.taskId);
+            project.deleteTask(data.taskID);
         }
         DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectId, project, data.filter);
+        this.updateProject(data.projectID, project, data.filter);
     }
 
     editTaskHandler(msg, data) {
-        const project = this.projects[Number(data.projectId)];
-        if (project.hasTaskId(data.taskId)) {
-            const task = project.getTask(data.taskId);
-            const subtask = task.getSubtask(data.subtaskId);
+        const project = this.projects[Number(data.projectID)];
+        if (project.hasTaskId(data.taskID)) {
+            const task = project.getTask(data.taskID);
+            const subtask = task.getSubtask(data.subtaskID);
             if (subtask) {
                 subtask.title = data.txt;
                 subtask.dueDate = (data.due ? parseISO(data.due) : null);
@@ -186,7 +186,7 @@ class App {
             }
         }
         DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectId, project, data.filter);   
+        this.updateProject(data.projectID, project, data.filter);   
     }
 }
 

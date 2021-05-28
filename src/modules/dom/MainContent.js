@@ -44,7 +44,7 @@ function editProjectHandler() {
         editFields[0].contentEditable = 'false';
         editFields[1].contentEditable = 'false';
         const description = editFields[1].textContent;
-        const data = {id: projectID, title: title, description: description};
+        const data = {projectID: projectID, title: title, description: description};
         PubSub.publish('editProjectClick', data);
     }
 }
@@ -54,7 +54,7 @@ function deleteProjectHandler() {
     const deleteProjectBtn = document.getElementById('delete-project-btn');
     const editFields = document.querySelectorAll('.project-title, .project-description');
 
-    const data = {id: projectID};
+    const data = {projectID: projectID};
 
     deleteProjectBtn.style.display = 'none';
     editFields[0].contentEditable = 'false';
