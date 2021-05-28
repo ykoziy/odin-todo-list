@@ -27,7 +27,7 @@ function addNewTaskHandler(event, projectID) {
     event.preventDefault();
     const title = event.target.querySelector("#title").value;
     const duedate = event.target.querySelector("#duedate").value;
-    const data = {title: title, duedate: duedate, id: projectID};
+    const data = {title: title, duedate: duedate, projectID: projectID};
     PubSub.publish('newTask', data);
     hideModal();
 }

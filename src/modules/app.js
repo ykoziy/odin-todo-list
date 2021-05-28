@@ -44,19 +44,17 @@ class App {
     
     // TODO: finish, adding task without project.
     addNewTask(msg, data) {
-        console.log(`Adding task to the project with id: ${data.id}`);
+        console.log(`Adding task to the project with id: ${data.projectID}`);
         const task = new Task(data.title, parseISO(data.duedate));
-        if (data.id == null) {
+        if (data.projectID == null) {
             console.log('project was null, add to the inbox?!?');
             return;
         }
-    
-        let project = null;
 
-        this.projects[data.id].addTask(task);
-        project = this.projects[data.id];
+        this.projects[data.projectID].addTask(task);
+        let project = this.projects[data.projectID];
         DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectId, project, data.filter);
+        this.updateProject(data.projectID, project, data.filter);
     }
 
     addNewSubtask(msg, data) {
