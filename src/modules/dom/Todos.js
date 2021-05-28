@@ -298,7 +298,7 @@ function renderProjectItem(msg, data) {
     div.innerHTML = html;
 
     const todos = div.querySelector('.project-todos');
-    todos.addEventListener('click', event => handleTodoClick(event, data.id));
+    todos.addEventListener('click', event => handleTodoClick(event, data.projectID));
 
     const editBtns = div.querySelectorAll('.edit-task-btn');
     editBtns.forEach(item => item.addEventListener('click', editTaskHandler));
@@ -329,7 +329,7 @@ function handleFilteredTodoClick(event) {
         }
         const li = targetNode.closest('li');
         const filter = document.getElementById('filter-todos');
-        PubSub.publish('completeTask', {taskId: li.dataset.parentid, subtaskId: li.dataset.taskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
+        PubSub.publish('completeTask', {taskID: li.dataset.taskid, subtaskID: li.dataset.subtaskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
     }
 }
 
