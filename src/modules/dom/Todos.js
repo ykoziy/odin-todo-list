@@ -16,10 +16,11 @@ function renderProjectDetails(id, title, description) {
     `;
 }
 
-function generateFilterListItem(projectID, parentID, taskID, task) {
+function generateFilterListItem(projectID, taskID, subtaskID, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
+    const subtaskDataID = subtaskID ? `data-subtaskid="${subtaskID}"` : '';
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
-    return `<li data-projectid="${projectID}" data-parentid="${parentID}" data-taskid="${taskID}" >
+    return `<li data-projectid="${projectID}" data-taskid="${taskID}" ${subtaskDataID} >
             <input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
             <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>
             <div class="edit-task-btn">...</div>
@@ -220,18 +221,20 @@ function editButtonHandler(event) {
 function deleteButtonHandler(event) {
     const filter = document.getElementById('filter-todos');
     let projectId, taskId, subtaskId;
+    let filterType = null;
     if (filter) {
         let li = event.currentTarget.closest('li');
         projectId = li.dataset.projectid;
-        taskId = li.dataset.parentid;
-        subtaskId = li.dataset.taskid;
+        taskId = li.dataset.taskid;
+        subtaskId = li.dataset.subtaskid;
+        filterType = filter.dataset.filter;
     } else {
         projectId = document.querySelector('.project-title').dataset.idx;
         taskId = event.currentTarget.closest('.task').dataset.id;
         subtaskId = event.currentTarget.parentElement.dataset.id;     
     }    
     console.log(`Deleteing Project id: ${projectId}, Task id: ${taskId}, Subtask id: ${subtaskId}`);
-    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId, filter: filter.dataset.filter}, 'deleteTask');
+    showDeleteConfirmationModal({projectId: projectId, taskId: taskId, subtaskId: subtaskId, filter: filterType}, 'deleteTask');
 }
 
 function createEditElements(parent) {
@@ -333,7 +336,7 @@ function renderFilteredTasks(msg, data) {
     const mainDivMarkup = `
         <div id="filter-todos" data-filter="${data.filter}">
             <ul>
-            ${data.dt.map(item => generateFilterListItem(item.projectID, item.parentID, item.taskID, item.task)).join('')}                             
+            ${data.dt.map(item => generateFilterListItem(item.projectID, item.taskID, item.subtaskID, item.task)).join('')}                             
             </ul>
         </div>                   
     `;

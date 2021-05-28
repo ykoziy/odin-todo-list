@@ -104,12 +104,12 @@ class App {
                 for (const item of project.tasks) {
                     const task = item[1];
                     if (func(task)) {
-                        result.push({projectID: i, parentID: null, taskID: item[0], task: task});
+                        result.push({projectID: i, taskID: item[0], subtaskID: null, task: task});
                     }
                     for (const sub of task.subTasks) {
                         const subtask = sub[1];
                         if (func(subtask)) {
-                            result.push({projectID: i, parentID: item[0], taskID: sub[0], task: subtask});
+                            result.push({projectID: i, taskID: item[0], subtaskID: sub[0], task: subtask});
                         }                        
                     }
                 }
@@ -167,6 +167,7 @@ class App {
 
     deleteTaskHandler(msg, data) {
         const project = this.projects[data.projectId];
+        console.log(data);
         if (data.subtaskId) {
             project.getTask(data.taskId).deleteSubtask(data.subtaskId);
         } else {
