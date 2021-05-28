@@ -212,14 +212,14 @@ function editButtonHandler(event) {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
         if (taskTxt.validity.valid) {
-            PubSub.publish('editTask', {projectID: projectID, taskID: taskID, subtaskID: subtaskID, txt: taskTxt.value, due: taskDate.value, filter: filterType});
+            PubSub.publish('editTask', {projectID: Number(projectID), taskID: taskID, subtaskID: subtaskID, txt: taskTxt.value, due: taskDate.value, filter: filterType});
         } else {
             console.log('task title cannot be empty');
         }
     });
 
     addSubtaskBtn.addEventListener('click', () => {
-        showAddSubtaskModal(projectId, taskId);
+        showAddSubtaskModal(projectID, taskID);
     });
 }
 
@@ -329,7 +329,7 @@ function handleFilteredTodoClick(event) {
         }
         const li = targetNode.closest('li');
         const filter = document.getElementById('filter-todos');
-        PubSub.publish('completeTask', {taskID: li.dataset.taskid, subtaskID: li.dataset.subtaskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
+        PubSub.publish('completeTask', {taskID: Number(li.dataset.taskid), subtaskID: li.dataset.subtaskid, projectID: li.dataset.projectid, filter: filter.dataset.filter});
     }
 }
 

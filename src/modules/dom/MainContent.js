@@ -11,7 +11,7 @@ const markup = `
 function getProjectID() {
     const titleH1 = document.querySelector('.project-title');
     if (!titleH1) return null;
-    return titleH1.dataset.idx;
+    return Number(titleH1.dataset.idx);
 }
 
 function editProjectHandler() {

@@ -68,7 +68,7 @@ class App {
     }
 
     completeTaskHandler(msg, data) {
-        const project = this.projects[Number(data.projectID)];
+        const project = this.projects[data.projectID];
         if (project.hasTaskId(data.taskID)) {
             const task = project.getTask(data.taskID);
             const subtask = task.getSubtask(data.subtaskID);
@@ -154,7 +154,7 @@ class App {
 
     deleteProjectHandler(msg, data) {
         console.log(`Clicked on delete project. Deleting ${data.projectID}`);
-        this.projects.splice(Number(data.projectID), 1);
+        this.projects.splice(data.projectID, 1);
 
         const container = document.getElementById("content");
         renderMainContent(container);
@@ -174,7 +174,7 @@ class App {
     }
 
     editTaskHandler(msg, data) {
-        const project = this.projects[Number(data.projectID)];
+        const project = this.projects[data.projectID];
         if (project.hasTaskId(data.taskID)) {
             const task = project.getTask(data.taskID);
             const subtask = task.getSubtask(data.subtaskID);

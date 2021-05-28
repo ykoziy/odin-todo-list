@@ -113,7 +113,7 @@ function showAddTaskModal(projectID) {
     modal.style.display = 'flex';
 }
 
-function showAddSubtaskModal(projectID, taskId) {
+function showAddSubtaskModal(projectID, taskID) {
     let modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Subtask');
 
@@ -128,7 +128,7 @@ function showAddSubtaskModal(projectID, taskId) {
 
     modalForm.querySelector('#duedate').value = format(new Date(), 'yyyy-MM-dd');
 
-    modalForm.addEventListener('submit', (event) => (addNewSubtaskHandler(event, projectID, taskId)));
+    modalForm.addEventListener('submit', (event) => (addNewSubtaskHandler(event, projectID, taskID)));
 
     modal.style.display = 'flex';  
 }
