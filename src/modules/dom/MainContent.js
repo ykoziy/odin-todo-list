@@ -17,7 +17,7 @@ function getProjectID() {
 function editProjectHandler() {
     const projectID = getProjectID();
 
-    if (projectID === '0') {
+    if (projectID === 0) {
         return;
     }
 
