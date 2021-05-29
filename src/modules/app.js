@@ -15,6 +15,7 @@ class App {
 
     updateProject(projectID, project, filter) {
         if (filter) {
+            PubSub.publish('projectUpdateProgress', {projectID: projectID, project: project});
             switch (filter) {
                 case 'inbox':
                     PubSub.publish('inboxNavClick', null);
@@ -30,6 +31,7 @@ class App {
                     break;
             }
         } else {
+            PubSub.publish('projectUpdateProgress', {projectID: projectID, project: project});
             PubSub.publish('projectUpdated', {projectID: projectID, project: project});
         }
     }

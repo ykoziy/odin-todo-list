@@ -50,7 +50,7 @@ function generateMarkup(projects) {
 
 function renderHTML(projects) {
     PubSub.subscribe('projectsUpdated', (msg, data) => updateProjects(msg, data));
-    PubSub.subscribe('projectUpdated', (msg, data) => updateProjectProgress(msg, data));    
+    PubSub.subscribe('projectUpdateProgress', (msg, data) => updateProjectProgress(msg, data));    
     return generateMarkup(projects);
 }
 
