@@ -186,6 +186,7 @@ class App {
                 subtask.dueDate = (data.due ? parseISO(data.due) : null);
             } else {
                 task.title = data.txt;
+                task.dueDate = (data.due ? parseISO(data.due) : null);
             }
         }
         DataStore.saveTodoData(this.projects);
