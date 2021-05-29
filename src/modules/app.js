@@ -42,19 +42,20 @@ class App {
         PubSub.publish('projectsUpdated', this.projects);
     }
     
-    // TODO: finish, adding task without project.
     addNewTask(msg, data) {
         console.log(`Adding task to the project with id: ${data.projectID}`);
         const task = new Task(data.title, parseISO(data.duedate));
         if (data.projectID == null) {
-            console.log('project was null, add to the inbox?!?');
-            return;
+            this.projects[0].addTask(task);
+            let project = this.projects[0];
+            DataStore.saveTodoData(this.projects);
+            this.updateProject(0, project, data.filter);
+        } else {
+            this.projects[data.projectID].addTask(task);
+            let project = this.projects[data.projectID];
+            DataStore.saveTodoData(this.projects);
+            this.updateProject(data.projectID, project, data.filter);
         }
-
-        this.projects[data.projectID].addTask(task);
-        let project = this.projects[data.projectID];
-        DataStore.saveTodoData(this.projects);
-        this.updateProject(data.projectID, project, data.filter);
     }
 
     addNewSubtask(msg, data) {
