@@ -13,6 +13,7 @@ html {
 
 body {
     font-size: var(--baseFontSize);
+    overflow-x: hidden;
 }
 
 h1 {
@@ -77,6 +78,7 @@ h2 {
     flex-grow: 1;
     padding: 10px;
     overflow: auto;
+    overflow-x: hidden;
     height: 30%;
 }
 
@@ -90,6 +92,7 @@ h2 {
 #projects li p {
     max-width: 190px;
     overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;    
 }
@@ -132,6 +135,7 @@ h2 {
     padding: 20px;
     width: 100%;
     overflow: auto;
+    overflow-x: hidden;
 }
 
 #main-todos {
@@ -295,6 +299,7 @@ h2 {
     justify-content: start;
     width: 500px;
     overflow:hidden;
+    overflow-x: hidden;
 }
 
 .modal-content-header {
