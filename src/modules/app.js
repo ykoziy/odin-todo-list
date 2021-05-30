@@ -36,7 +36,20 @@ class App {
         }
     }
 
+    containsProject(title) {
+        for (const project of this.projects) {
+            if (project.title === title) {
+                return true;
+            }
+        }
+    }
+
     addNewProject(msg, data) {
+        if (this.containsProject(data.name)) {
+            // ! project name must be unique, show error modal?
+            console.log('error, project name must be unique');
+            return;
+        }
         console.log('New project added.');
         const proj = new Project(data.name, data.description);
         this.projects.push(proj);
