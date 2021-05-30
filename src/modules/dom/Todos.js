@@ -36,10 +36,11 @@ function generateTaskListItem(id, task) {
 
 function taskMarkup(id, task) {
     const classDone = `${task.isDone ? 'class="done"' : ''}`;
+    const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <div class="title"><h2 ${classDone}>${task.title}</h2></div>
+                <div class="title" data-duedate=${dueDate}><h2 ${classDone}>${task.title}</h2></div>
                 <div class="edit-task-btn">...</div>
             </div>                           
         </div>
@@ -141,12 +142,22 @@ function createEditFields(parent) {
         taskDate.style.display = 'none';
         txtInput.value = taskText.textContent;
         if (taskDate.textContent) {
-            dateInput.value = format(new Date(taskDate.textContent),  'yyyy-MM-dd');
+            dateInput.value = format(new Date(taskDate.textContent), 'yyyy-MM-dd');
         }
 
     } else {
         parent.childNodes[0].style.display = 'none';
         txtInput.value = parent.textContent;
+        const dueDate = parent.dataset.duedate;
+        const taskTodos = parent.parentNode.parentNode.querySelector('.task-todos');
+
+        if (taskTodos) {
+            dateInput.disabled = true;
+        }
+
+        if (dueDate) {
+            dateInput.value = format(new Date(dueDate), 'yyyy-MM-dd');
+        }
     }
 
     txtInput.addEventListener('keyup', (event) => {
