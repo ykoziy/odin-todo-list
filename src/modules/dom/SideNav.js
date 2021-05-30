@@ -41,7 +41,6 @@ function navHandler(event) {
 function projectHandler(event) {
     const node = event.target.nodeName.toLowerCase();
     if (node !== 'li' && node !== 'p') return;
-    console.log(`Clicked on ${event.target.textContent}`);
     let targetId = event.target.dataset.idx;
     if (node === 'p') {
         targetId = event.target.parentElement.dataset.idx;

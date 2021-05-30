@@ -1,7 +1,6 @@
 import PubSub from 'pubsub-js';
 
 function updateProjects(msg, data) {
-    console.log('projects changed, need to refresh.');
     const ul = document.querySelector('#projects ul');
     ul.innerHTML = renderProjects(data);
 }

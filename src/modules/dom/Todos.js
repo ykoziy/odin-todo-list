@@ -213,8 +213,6 @@ function editButtonHandler(event) {
         subtaskID = parentElement.dataset.id;        
     }
     const listItem = parentElement;
-    
-    console.log(`Editing Project id: ${projectID}, Task id: ${taskID}, Subtask id: ${subtaskID}`);
 
     clearEditFields();
     createEditFields(listItem);
@@ -253,7 +251,6 @@ function deleteButtonHandler(event) {
         taskID = event.currentTarget.closest('.task').dataset.id;
         subtaskID = event.currentTarget.parentElement.dataset.id;     
     }    
-    console.log(`Deleteing Project id: ${projectID}, Task id: ${taskID}, Subtask id: ${subtaskID}`);
     showDeleteConfirmationModal({projectID: projectID, taskID: taskID, subtaskID: subtaskID, filter: filterType}, 'deleteTask');
 }
 

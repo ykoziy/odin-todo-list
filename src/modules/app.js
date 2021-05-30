@@ -49,7 +49,6 @@ class App {
             showErrorModal('Project name must be unique.');
             return;
         }
-        console.log('New project added.');
         const proj = new Project(data.name, data.description);
         this.projects.push(proj);
         DataStore.saveTodoData(this.projects);
@@ -57,7 +56,6 @@ class App {
     }
     
     addNewTask(msg, data) {
-        console.log(`Adding task to the project with id: ${data.projectID}`);
         const task = new Task(data.title, parseISO(data.duedate));
         if (data.projectID == null) {
             this.projects[0].addTask(task);
@@ -73,7 +71,6 @@ class App {
     }
 
     addNewSubtask(msg, data) {
-        console.log(`Adding subtask to the task with id: ${data.taskID}`);
         const subtask = new Task(data.title, parseISO(data.duedate));
         const task = this.projects[data.projectID].getTask(data.taskID);
         task.addSubtask(subtask);
@@ -160,7 +157,6 @@ class App {
     }
     
     editProjectHandler(msg, data) {
-        console.log(`Clicked on edit project. Editing ${data.projectID}`);
         if (this.containsProject(data.title)) {
             showErrorModal('Project name must be unique.');
             return;
@@ -172,7 +168,6 @@ class App {
     }
 
     deleteProjectHandler(msg, data) {
-        console.log(`Clicked on delete project. Deleting ${data.projectID}`);
         this.projects.splice(data.projectID, 1);
 
         const container = document.getElementById("content");
