@@ -331,7 +331,6 @@ function editFilterTaskHandler(event) {
     EDIT = true;
 }
 
-// ! Bug: after clicking project is displayed....
 function handleFilteredTodoClick(event) {
     let targetNode = event.target;
     const nodeName = targetNode.nodeName.toLowerCase();

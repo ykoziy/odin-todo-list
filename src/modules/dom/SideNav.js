@@ -48,6 +48,15 @@ function projectHandler(event) {
     PubSub.publish('getProject', targetId);
 }
 
+function searchTaskHandler(event) {
+    if (event.keyCode == 13) {
+        const searchQuery = event.target.value;
+        if (searchQuery) {
+            PubSub.publish('searchTasks', {query: searchQuery});
+        }
+    }
+}
+
 function renderHTML(parentElement, projects) {
     const div = document.createElement('div');
 
@@ -55,6 +64,9 @@ function renderHTML(parentElement, projects) {
     div.innerHTML = generateMarkup(projects);
 
     div.querySelector('#add-project-btn').addEventListener('click', newProjectHandler);
+
+    const searchInput = div.querySelector('#search input');
+    searchInput.addEventListener('keydown', searchTaskHandler);    
 
     const navMenu = div.querySelector('nav ul');
     navMenu .addEventListener('click', navHandler);

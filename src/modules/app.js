@@ -156,6 +156,13 @@ class App {
         console.log('urgent clicked, inop');
     }
     
+    searchTasksHandler(msg, data) {
+        const result = this.filterTasks((task) => {
+            return task.title.includes(data.query);
+        });
+        PubSub.publish('filterTodos', {dt: result, filter: 'search'});
+    }
+
     editProjectHandler(msg, data) {
         if (this.containsProject(data.title)) {
             showErrorModal('Project name must be unique.');
@@ -261,6 +268,7 @@ function init() {
     PubSub.subscribe('upcomingNavClick', () => app.upcomingClickHandler());
     PubSub.subscribe('todayNavClick', () => app.todayClickHandler());
     PubSub.subscribe('urgentNavClick', () => app.urgentClickHandler());
+    PubSub.subscribe('searchTasks', (msg, data) => app.searchTasksHandler(msg, data));
 
     PubSub.subscribe('editProjectClick', (msg, data) => app.editProjectHandler(msg, data));
     PubSub.subscribe('deleteProject', (msg, data) => app.deleteProjectHandler(msg, data));
