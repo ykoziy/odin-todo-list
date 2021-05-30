@@ -162,6 +162,11 @@ class App {
     
     editProjectHandler(msg, data) {
         console.log(`Clicked on edit project. Editing ${data.projectID}`);
+        if (this.containsProject(data.title)) {
+            // ! project name must be unique, show error modal?
+            console.log('error, project name must be unique');
+            return;
+        }
         this.projects[data.projectID].title = data.title;
         this.projects[data.projectID].description = data.description;
         DataStore.saveTodoData(this.projects);
