@@ -5,7 +5,7 @@ import { isToday, isThisWeek, parseISO, startOfYesterday, isWithinInterval} from
 
 import {renderHTML as renderSideNav} from './dom/SideNav';
 import {renderHTML as renderMainContent} from './dom/MainContent';
-import {renderHTML as renderModal} from './dom/Modal';
+import {renderHTML as renderModal, showErrorModal } from './dom/Modal';
 import PubSub from 'pubsub-js';
 
 class App {
@@ -46,8 +46,7 @@ class App {
 
     addNewProject(msg, data) {
         if (this.containsProject(data.name)) {
-            // ! project name must be unique, show error modal?
-            console.log('error, project name must be unique');
+            showErrorModal('Project name must be unique.');
             return;
         }
         console.log('New project added.');
@@ -163,8 +162,7 @@ class App {
     editProjectHandler(msg, data) {
         console.log(`Clicked on edit project. Editing ${data.projectID}`);
         if (this.containsProject(data.title)) {
-            // ! project name must be unique, show error modal?
-            console.log('error, project name must be unique');
+            showErrorModal('Project name must be unique.');
             return;
         }
         this.projects[data.projectID].title = data.title;
