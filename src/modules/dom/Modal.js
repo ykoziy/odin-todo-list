@@ -1,9 +1,10 @@
 import PubSub from 'pubsub-js';
 import { format } from 'date-fns';
 
-function markup(title) {
+function markup(title, type) {
+    let modalTypeClass = type ? type+'-modal' : '';
     let markup = `
-        <div class="modal-content">
+        <div class="modal-content ${modalTypeClass}">
             <div class="modal-content-header"><h1>${title}</h1></div>
             <div class="modal-content-body">
                 <form>
@@ -165,7 +166,7 @@ function showDeleteConfirmationModal(data, type) {
 
 function showErrorModal(text) {
     let modal = document.querySelector('.modal');
-    modal.innerHTML = markup('Error');
+    modal.innerHTML = markup('Error', 'error');
     modal.querySelector('form').remove();
     let p = document.createElement('p');
     p.textContent = text;
