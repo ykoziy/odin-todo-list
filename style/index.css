@@ -302,6 +302,10 @@ h2 {
     overflow-x: hidden;
 }
 
+.error-modal {
+    border-color: red;
+}
+
 .modal-content-header {
     height: 80px;
     text-align: center;
