@@ -13,7 +13,8 @@ function updateProjectProgress(msg, data) {
 function renderProjects(projects) {
     const listItem = document.createElement('div');
     listItem.classList.add('cicrle-status');
-    const html = `${
+    let html = '<div id="projects-title">Projects</div>';
+    html += `${
         projects.map((proj, idx) => {
             const style = setProgress(proj.getPercentComplete());
             return `<li data-idx="${idx}"><div class="circle-status" style="${style}"></div><p>${proj.title}</p></li>`
@@ -24,7 +25,7 @@ function renderProjects(projects) {
 
 function setProgress(percent) {
   let angle = percent * 3.6;
-  let secondGradient = 'linear-gradient(-90deg, green 50%, transparent 50%';
+  let secondGradient = 'linear-gradient(-90deg, #db4c3f 50%, transparent 50%';
   let style = 'background-image: ';
   if (percent > 100) {
       percent = 100;
@@ -32,7 +33,7 @@ function setProgress(percent) {
   if (percent <= 50) {
         style += `linear-gradient(${angle - 90}deg, white 50%, transparent 50%), ${secondGradient})`;
   } else {
-        style += `linear-gradient(${angle - 270}deg, green 50%, transparent 50%), ${secondGradient})`;
+        style += `linear-gradient(${angle - 270}deg, #db4c3f 50%, transparent 50%), ${secondGradient})`;
   }
   return style;
 }

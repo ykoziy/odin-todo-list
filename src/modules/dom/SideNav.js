@@ -8,7 +8,7 @@ function generateMarkup(projects) {
         ${renderNav()}
         ${renderProjects(projects)}
         <div id="add-project">
-            <div id="add-project-btn">+ New Project</div>
+            <div id="add-project-btn">+ Add Project</div>
         </div>
     `;
 }

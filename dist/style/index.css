@@ -41,11 +41,12 @@ h2 {
 }
 
 #navigation {
-    background-color: lightskyblue;
+    background-color: #dddcdc;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 0.5;
     padding: 10px;
+    border-bottom: 3px solid black;
 }
 
 #navigation li {
@@ -56,7 +57,7 @@ h2 {
 #navigation li:hover {
     font-weight: bold;
     cursor: pointer;
-    border-left: 3px solid #3366FF;
+    border-left: 3px solid #db4c3f;
     margin-left: -3px;
 }
 
@@ -67,19 +68,23 @@ h2 {
 #search input {
     width: 230px;
     height: 30px;
-    border: 1px solid #3366FF;
-    border-left: 4px solid #3366FF;
+    border: 1px solid #db4c3f;
+    border-left: 4px solid #db4c3f;
 }
 
 #projects {
-    background-color: lightsalmon;
+    background-color: #dddcdc;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 3.5;
     padding: 10px;
     overflow: auto;
     overflow-x: hidden;
     height: 30%;
+}
+
+#projects-title {
+    border-bottom: 1px solid #db4c3f;
 }
 
 #projects li {
@@ -126,10 +131,12 @@ h2 {
 
 #add-project-btn {
     cursor: pointer;
+    color: #dd4a39;
+    font-weight: bold;
 }
 
 #main-content {
-    background-color: lightslategray;
+    background-color: #ffffff;
     flex-grow: 2;
     display: flex;
     padding: 20px;
@@ -185,7 +192,7 @@ h2 {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid #f0f0f0;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -214,7 +221,7 @@ h2 {
 #add-todo-btn,
 #edit-project-btn,
 #delete-project-btn {
-    background-color: yellowgreen;
+    background-color: #db4c3f;
     text-align: center;
     width: 45px;
     height: 45px;
@@ -227,23 +234,21 @@ h2 {
 }
 
 #delete-project-btn {
-    color: red;
+    color: white;
     font-size: 20px;
     margin-top: 15px;
     display: none;
 }
 
-
-
 [contenteditable=true] {
-    background: rgba(255,255,255,0.5); /* transparent bg */
+    background: rgba(138, 138, 138, 0.5); /* transparent bg */
     resize: none;
     max-width: 80%;
-    outline: 2px solid white;
+    outline: 2px solid orange;
  }
 
 .edit-task-btn {
-    color: white;
+    color: #bebebe;
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;   
