@@ -163,6 +163,16 @@ function showDeleteConfirmationModal(data, type) {
     modal.style.display = 'flex';  
 }
 
+function showErrorModal(text) {
+    let modal = document.querySelector('.modal');
+    modal.innerHTML = markup('Error');
+    modal.querySelector('form').remove();
+    let p = document.createElement('p');
+    p.textContent = text;
+    modal.querySelector('.modal-content-body').appendChild(p);
+    modal.style.display = 'flex';
+}
+
 function hideModal() {
     let modal = document.querySelector('.modal');
     modal.innerHTML = '';
@@ -178,4 +188,4 @@ function renderHTML() {
     document.querySelector('body').appendChild(div);
 }
 
-export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal, showDeleteConfirmationModal };
+export { renderHTML, showAddSubtaskModal, showAddTaskModal, showAddProjectModal, showDeleteConfirmationModal, showErrorModal };
