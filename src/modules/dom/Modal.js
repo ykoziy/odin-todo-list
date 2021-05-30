@@ -136,7 +136,7 @@ function showAddSubtaskModal(projectID, taskID) {
 
 function showDeleteConfirmationModal(data, type) {
     let modal = document.querySelector('.modal');
-    modal.innerHTML = markup('Are you sure you want to delete?');
+    modal.innerHTML = markup('Are you sure you want to delete?', 'warning');
     modal.querySelector('form').remove();
 
     const modalBody = modal.querySelector('.modal-content-body');
