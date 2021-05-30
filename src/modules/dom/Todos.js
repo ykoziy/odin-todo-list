@@ -1,4 +1,4 @@
-import { showAddSubtaskModal, showDeleteConfirmationModal } from './Modal';
+import { showAddSubtaskModal, showDeleteConfirmationModal, showErrorModal } from './Modal';
 import { format } from 'date-fns';
 
 const markup = `
@@ -227,7 +227,7 @@ function editButtonHandler(event) {
         if (taskTxt.validity.valid) {
             PubSub.publish('editTask', {projectID: Number(projectID), taskID: taskID, subtaskID: subtaskID, txt: taskTxt.value, due: taskDate.value, filter: filterType});
         } else {
-            console.log('task title cannot be empty');
+            showErrorModal('Task title cannot be empty.');
         }
     });
 
