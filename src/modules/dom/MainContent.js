@@ -1,6 +1,6 @@
 import {renderHTML as renderTodos} from './Todos';
 import {renderHTML as renderAside} from './Aside';
-import { showAddTaskModal, showDeleteConfirmationModal } from './Modal';
+import { showAddTaskModal, showDeleteConfirmationModal, showErrorModal } from './Modal';
 import PubSub from 'pubsub-js';
 
 const markup = `
@@ -35,9 +35,8 @@ function editProjectHandler() {
         editFields[1].contentEditable = 'true';
     } else {
         const title = editFields[0].textContent;
-        // title cannot be empty, show error modal?
         if (title.length == 0) {
-            console.log('error, title cannot be blank');
+            showErrorModal('Project must have a name.');
             return;
         }
         deleteProjectBtn.style.display = 'none';
