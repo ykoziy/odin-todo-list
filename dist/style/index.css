@@ -7,6 +7,8 @@ html {
 
 :root {
     --baseFontSize: 1.1rem;
+    --buttonFontSize: 1.7rem;
+    --buttonFontFamily: 'Padauk', sans-serif;
     --h1FontSize: 2rem;
     --h2FontSize: 1.5rem;    
 }
@@ -302,8 +304,9 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    width: 500px;
-    overflow:hidden;
+    width: 400px;
+    height: fit-content;
+    overflow: hidden;
     overflow-x: hidden;
 }
 
@@ -325,6 +328,21 @@ h2 {
 .modal-content-body {
     padding: 1.5rem;
     height: 350px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+
+.modal-content button, input[type="submit"] {
+    width: 100px;
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    align-self: center;
+    font-size: var(--buttonFontSize);
+    font-family: var(--buttonFontFamily);
 }
 
 form {
