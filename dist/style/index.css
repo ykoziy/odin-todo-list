@@ -190,6 +190,10 @@ h2 {
     flex-direction: column;
 }
 
+.task:hover .task-title {
+    border-bottom: 2px solid grey;
+}
+
 .task-title {
     display: flex;
     align-items: flex-end;
@@ -255,6 +259,10 @@ h2 {
     font-weight: bold;
     cursor: pointer;   
     display: inline-block;
+}
+
+.edit-task-btn:hover {
+    color: #db4c3f;
 }
 
 .submit-task-btn {
