@@ -335,7 +335,7 @@ h2 {
     align-self: center;
 }
 
-.modal-content button, input[type="submit"] {
+.modal-content button, input[type="submit"], input[type="button"] {
     width: 100px;
     height: 50px;
     margin-top: 10px;
@@ -343,6 +343,11 @@ h2 {
     align-self: center;
     font-size: var(--buttonFontSize);
     font-family: var(--buttonFontFamily);
+}
+
+#modal-choice {
+    display: flex;
+    justify-content: space-around;
 }
 
 form {

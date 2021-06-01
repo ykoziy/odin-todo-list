@@ -61,12 +61,15 @@ function createAndAppendLabel(forAttrib, text, parent) {
     parent.appendChild(label);
 }
 
-function createAndAppendInput(type, id, isRequired, parent) {
-    let input = document.createElement('input');
+function createAndAppendInput(type, id, isRequired, parent, value) {
+    const input = document.createElement('input');
     input.type = type;
     input.setAttribute('id', id);
     if (isRequired) {
         input.setAttribute('required', '');
+    }
+    if (value) {
+        input.setAttribute('value', value);
     }
     parent.appendChild(input);
 }
@@ -76,6 +79,15 @@ function createAndAppendSubmit(value, parent) {
     submit.type = 'submit';
     submit.setAttribute('value', value);
     parent.appendChild(submit);
+}
+
+function createAndAppendChoicesDiv(parent) {
+    const div = document.createElement('div');
+    div.setAttribute('id', 'modal-choice');
+    createAndAppendInput('submit', 'submit-modal', null, div, 'OK');
+    createAndAppendInput('button', 'submit-modal', null, div, 'Cancel');
+    div.querySelector('input[type="button"]').addEventListener('click', hideModal);
+    parent.appendChild(div);   
 }
 
 function showAddProjectModal() {
@@ -89,7 +101,7 @@ function showAddProjectModal() {
     createAndAppendInput('text', 'name', true, modalForm);
     createAndAppendLabel('description', 'Project description:', modalForm);
     createAndAppendInput('text', 'description', false, modalForm);
-    createAndAppendSubmit('Ok', modalForm);
+    createAndAppendChoicesDiv(modalForm);
 
     modalForm.addEventListener('submit', addNewProjectHandler);
 
@@ -107,7 +119,7 @@ function showAddTaskModal(projectID) {
     createAndAppendInput('text', 'title', true, modalForm);
     createAndAppendLabel('duedate', 'Due date:', modalForm);
     createAndAppendInput('date', 'duedate', false, modalForm);
-    createAndAppendSubmit('Ok', modalForm);
+    createAndAppendChoicesDiv(modalForm);
 
     modalForm.addEventListener('submit', (event) => (addNewTaskHandler(event, projectID)));
 
@@ -125,7 +137,7 @@ function showAddSubtaskModal(projectID, taskID) {
     createAndAppendInput('text', 'title', true, modalForm);
     createAndAppendLabel('duedate', 'Due date:', modalForm);
     createAndAppendInput('date', 'duedate', false, modalForm);
-    createAndAppendSubmit('Ok', modalForm);
+    createAndAppendChoicesDiv(modalForm);
 
     modalForm.querySelector('#duedate').value = format(new Date(), 'yyyy-MM-dd');
 
