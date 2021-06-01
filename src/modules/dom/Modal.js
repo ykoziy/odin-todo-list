@@ -2,8 +2,8 @@ import PubSub from 'pubsub-js';
 import { format } from 'date-fns';
 
 function markup(title, type) {
-    let modalTypeClass = type ? type+'-modal' : '';
-    let markup = `
+    const modalTypeClass = type ? type+'-modal' : '';
+    const markup = `
         <div class="modal-content ${modalTypeClass}">
             <div class="modal-content-header"><h1>${title}</h1></div>
             <div class="modal-content-body">
@@ -55,7 +55,7 @@ function clickOutsideModalHandler(event) {
 }
 
 function createAndAppendLabel(forAttrib, text, parent) {
-    let label = document.createElement('label');
+    const label = document.createElement('label');
     label.textContent = text;
     label.setAttribute('for', forAttrib);
     parent.appendChild(label);
@@ -74,13 +74,6 @@ function createAndAppendInput(type, id, isRequired, parent, value) {
     parent.appendChild(input);
 }
 
-function createAndAppendSubmit(value, parent) {
-    let submit = document.createElement('input');
-    submit.type = 'submit';
-    submit.setAttribute('value', value);
-    parent.appendChild(submit);
-}
-
 function createAndAppendChoicesDiv(parent) {
     const div = document.createElement('div');
     div.setAttribute('id', 'modal-choice');
@@ -91,10 +84,10 @@ function createAndAppendChoicesDiv(parent) {
 }
 
 function showAddProjectModal() {
-    let modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Project');
 
-    let modalForm = modal.querySelector('form');
+    const modalForm = modal.querySelector('form');
     modalForm.setAttribute('id', 'add-project');
 
     createAndAppendLabel('name', 'Project name:', modalForm);
@@ -109,10 +102,10 @@ function showAddProjectModal() {
 }
 
 function showAddTaskModal(projectID) {
-    let modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Task');
 
-    let modalForm = modal.querySelector('form');
+    const modalForm = modal.querySelector('form');
     modalForm.setAttribute('id', 'add-task');
 
     createAndAppendLabel('title', 'Task title:', modalForm);
@@ -127,10 +120,10 @@ function showAddTaskModal(projectID) {
 }
 
 function showAddSubtaskModal(projectID, taskID) {
-    let modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Subtask');
 
-    let modalForm = modal.querySelector('form');
+    const modalForm = modal.querySelector('form');
     modalForm.setAttribute('id', 'add-task');
 
     createAndAppendLabel('title', 'Task title:', modalForm);
@@ -147,7 +140,7 @@ function showAddSubtaskModal(projectID, taskID) {
 }
 
 function showDeleteConfirmationModal(data, type) {
-    let modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
     modal.innerHTML = markup('Are you sure you want to delete?', 'warning');
     modal.querySelector('form').remove();
 
