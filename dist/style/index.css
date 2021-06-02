@@ -165,9 +165,17 @@ h2 {
     align-items: center;
 }
 
+#filter-todos li:hover {
+    color: #db4c3f;
+}
+
 #filter-todos .edit-task-btn {
     display: flex;
     margin-left: auto;
+}
+
+#filter-todos li:hover .edit-task-btn {
+    color: #db4c3f;
 }
 
 .project-details {
@@ -356,6 +364,10 @@ h2 {
 #modal-choice {
     display: flex;
     justify-content: space-around;
+}
+
+.error-modal .modal-content-body {
+    justify-content:flex-start;
 }
 
 form {
