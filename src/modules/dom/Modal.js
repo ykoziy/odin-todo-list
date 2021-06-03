@@ -83,6 +83,13 @@ function createAndAppendChoicesDiv(parent) {
     parent.appendChild(div);   
 }
 
+function createAndAppendUrgentDiv(parent) {
+    const div = document.createElement('urgent-task-choice');
+    createAndAppendInput('checkbox', 'urgent', false, div);
+    createAndAppendLabel('urgent', 'Urgent?', div);
+    parent.appendChild(div);
+}
+
 function showAddProjectModal() {
     const modal = document.querySelector('.modal');
     modal.innerHTML = markup('Add Project');
@@ -112,7 +119,10 @@ function showAddTaskModal(projectID) {
     createAndAppendInput('text', 'title', true, modalForm);
     createAndAppendLabel('duedate', 'Due date:', modalForm);
     createAndAppendInput('date', 'duedate', false, modalForm);
+    createAndAppendUrgentDiv(modalForm);
     createAndAppendChoicesDiv(modalForm);
+
+    modalForm.querySelector('#duedate').value = format(new Date(), 'yyyy-MM-dd');
 
     modalForm.addEventListener('submit', (event) => (addNewTaskHandler(event, projectID)));
 
@@ -130,6 +140,7 @@ function showAddSubtaskModal(projectID, taskID) {
     createAndAppendInput('text', 'title', true, modalForm);
     createAndAppendLabel('duedate', 'Due date:', modalForm);
     createAndAppendInput('date', 'duedate', false, modalForm);
+    createAndAppendUrgentDiv(modalForm);
     createAndAppendChoicesDiv(modalForm);
 
     modalForm.querySelector('#duedate').value = format(new Date(), 'yyyy-MM-dd');
