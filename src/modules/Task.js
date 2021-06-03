@@ -42,6 +42,14 @@ export default class Task {
         return this._isDone;   
     }
 
+    set isUrgent(isUrgent) {
+        this._isUrgent = isUrgent; 
+    }
+
+    get isUrgent() {
+        return this._isUrgent;   
+    }
+
     get subTasks() {
         return this._subTasks;
     }
