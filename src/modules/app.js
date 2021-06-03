@@ -56,7 +56,7 @@ class App {
     }
     
     addNewTask(msg, data) {
-        const task = new Task(data.title, (data.duedate ? parseISO(data.duedate) : null));
+        const task = new Task(data.title, (data.duedate ? parseISO(data.duedate) : null), data.isUrgent);
         if (data.projectID == null) {
             this.projects[0].addTask(task);
             let project = this.projects[0];
@@ -71,7 +71,7 @@ class App {
     }
 
     addNewSubtask(msg, data) {
-        const subtask = new Task(data.title, (data.duedate ? parseISO(data.duedate) : null));
+        const subtask = new Task(data.title, (data.duedate ? parseISO(data.duedate) : null), data.isUrgent);
         const task = this.projects[data.projectID].getTask(data.taskID);
         task.addSubtask(subtask);
         const project = this.projects[data.projectID];
