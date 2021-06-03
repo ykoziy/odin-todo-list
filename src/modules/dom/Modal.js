@@ -28,7 +28,8 @@ function addNewTaskHandler(event, projectID) {
     event.preventDefault();
     const title = event.target.querySelector("#title").value;
     const duedate = event.target.querySelector("#duedate").value;
-    const data = {title: title, duedate: duedate, projectID: projectID};
+    const isUrgent = event.target.querySelector("#urgent").checked;
+    const data = {title: title, duedate: duedate, projectID: projectID, isUrgent: isUrgent};
     PubSub.publish('newTask', data);
     hideModal();
 }
@@ -37,7 +38,8 @@ function addNewSubtaskHandler(event, projectID, taskID) {
     event.preventDefault();
     const title = event.target.querySelector("#title").value;
     const duedate = event.target.querySelector("#duedate").value;
-    const data = {title: title, duedate: duedate, projectID: projectID, taskID: taskID};
+    const isUrgent = event.target.querySelector("#urgent").checked;
+    const data = {title: title, duedate: duedate, projectID: projectID, taskID: taskID, isUrgent: isUrgent};
     PubSub.publish('newSubtask', data);
     hideModal();
 }
