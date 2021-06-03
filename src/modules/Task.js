@@ -1,12 +1,13 @@
 import { nanoid } from 'nanoid';
 
 export default class Task {
-    constructor(title, dueDate = null) {
+    constructor(title, dueDate = null, isUrgent = null) {
         this._title = title;
         this._dueDate = dueDate;
         this._creationDate = new Date();
         this._subTasks = new Map();
         this._isDone = false;
+        this._isUrgent = isUrgent;
     }
 
     set title(title) {
