@@ -153,7 +153,10 @@ class App {
     }
     
     urgentClickHandler() {
-        console.log('urgent clicked, inop');
+        const data = this.filterTasks((task) => {
+            return task.isUrgent;
+        });
+        PubSub.publish('filterTodos', {dt: data, filter: 'urgent'});
     }
     
     searchTasksHandler(msg, data) {
