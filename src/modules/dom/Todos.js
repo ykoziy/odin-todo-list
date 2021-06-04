@@ -20,9 +20,11 @@ function generateFilterListItem(projectID, taskID, subtaskID, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const subtaskDataID = subtaskID ? `data-subtaskid="${subtaskID}"` : '';
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
+    const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `<li data-projectid="${projectID}" data-taskid="${taskID}" ${subtaskDataID} >
             <input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
             <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>
+            ${urgent}
             <div class="edit-task-btn">...</div>
             </li>`;
 }
@@ -30,17 +32,19 @@ function generateFilterListItem(projectID, taskID, subtaskID, task) {
 function generateTaskListItem(id, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
+    const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `<li data-id="${id}" class="subtask"><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span></li>`;
+            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>${urgent}</li>`;
 }
 
 function taskMarkup(id, task) {
     const classDone = `${task.isDone ? 'class="done"' : ''}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
+    const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <div class="title" data-duedate=${dueDate}><h2 ${classDone}>${task.title}</h2></div>
+                <div class="title" data-duedate=${dueDate}><h2 ${classDone}>${task.title}</h2>${urgent}</div>
                 <div class="edit-task-btn">...</div>
             </div>                           
         </div>

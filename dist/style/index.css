@@ -212,11 +212,17 @@ h2 {
 }
 
 .task-title .title {
-    display: flex; 
+    display: flex;
+    align-items: center;
 }
 
 .task-todos {
     margin-left: 15px;
+}
+
+.task-todos li {
+    display: flex;
+    align-items: center;
 }
 
 .done {
@@ -298,6 +304,14 @@ h2 {
 
 .task-due-date {
     margin-left: 10px;
+}
+
+.urgent-task {
+    background-color: #db4c3f;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 5px;
 }
 
 .modal {
