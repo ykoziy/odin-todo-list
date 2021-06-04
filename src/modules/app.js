@@ -205,11 +205,14 @@ class App {
             if (subtask) {
                 subtask.title = data.txt;
                 subtask.dueDate = (data.due ? parseISO(data.due) : null);
+                subtask.isUrgent = data.urgent;
             } else if (!task.hasSubtasks()) {
                 task.title = data.txt;
                 task.dueDate = (data.due ? parseISO(data.due) : null);
+                task.isUrgent = data.urgent;
             } else {
                 task.title = data.txt;
+                task.isUrgent = data.urgent;
             }
         }
         DataStore.saveTodoData(this.projects);

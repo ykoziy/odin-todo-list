@@ -22,9 +22,8 @@ function generateFilterListItem(projectID, taskID, subtaskID, task) {
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
     const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `<li data-projectid="${projectID}" data-taskid="${taskID}" ${subtaskDataID} >
-            <input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>
-            ${urgent}
+            <input type="checkbox" id="isdone" ${task.isDone ? 'checked' : ''}>
+            <span ${htmlClass}>${task.title}</span>${urgent}<span class='task-due-date'>${dueDate}</span>
             <div class="edit-task-btn">...</div>
             </li>`;
 }
@@ -33,8 +32,8 @@ function generateTaskListItem(id, task) {
     const htmlClass = `${task.isDone ? 'class="task-txt done"' : 'class="task-txt"'}`;
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
     const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
-    return `<li data-id="${id}" class="subtask"><input type="checkbox" value="done" ${task.isDone ? 'checked' : ''}>
-            <span ${htmlClass}>${task.title}</span><span class='task-due-date'>${dueDate}</span>${urgent}</li>`;
+    return `<li data-id="${id}" class="subtask"><input type="checkbox" id="isdone" ${task.isDone ? 'checked' : ''}>
+            <span ${htmlClass}>${task.title}</span>${urgent}<span class='task-due-date'>${dueDate}</span></li>`;
 }
 
 function taskMarkup(id, task) {
@@ -58,10 +57,11 @@ function subtasksMarkup(id, task) {
         subtasks.push({id: key, task: task})
     });
     const classDone = `${task.areSubtasksDone() ? 'class="done"' : ''}`;
+    const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <div class="title"><h2 ${classDone}>${task.title}</h2></div>
+                <div class="title"><h2 ${classDone}>${task.title}</h2>${urgent}</div>
                 <div class="edit-task-btn">...</div>
             </div>
             <div class="task-todos">
@@ -92,8 +92,8 @@ function renderProjectTasks(tasks) {
 function handleTodoClick(event, projectID) {
     let targetNode = event.target;
     const nodeName = targetNode.nodeName.toLowerCase();
-    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox' || nodeName == 'span') {
-        if (targetNode.type == 'checkbox') {
+    if (nodeName == 'li' || nodeName == 'h2' || targetNode.id == 'isdone' || nodeName == 'span') {
+        if (targetNode.id == 'isdone') {
             targetNode = event.target.parentElement;
         }
         const subtaskElement = targetNode.closest('.subtask');
@@ -116,6 +116,7 @@ function clearButtons() {
 
 function createEditFields(parent) {
     let checkBox = parent.querySelector('input[type="checkbox"]');
+    let urgentDiv = parent.querySelector('.urgent-task');
 
     const txtInput = document.createElement('input');
     txtInput.setAttribute('type', 'text');
@@ -125,6 +126,19 @@ function createEditFields(parent) {
     const dateInput = document.createElement('input');
     dateInput.setAttribute('type', 'date');
     dateInput.setAttribute('id', 'taskdate');
+
+    const urgentCheckbox = document.createElement('input');
+    urgentCheckbox.setAttribute('type', 'checkbox');
+    urgentCheckbox.setAttribute('id', 'isurgent');
+    if (urgentDiv) {
+        urgentCheckbox.checked = true;
+        urgentDiv.style.display = 'none';
+    }
+
+    const label = document.createElement('label')
+    label.htmlFor = 'isurgent';
+    label.setAttribute('id', 'isurgent-label');
+    label.appendChild(document.createTextNode('Urgent?'));
 
     
     const submitButton = document.createElement('button');
@@ -136,12 +150,9 @@ function createEditFields(parent) {
     addSubtaskBtn.innerHTML = '<i class="fas fa-plus-square"></i>';
 
     if (checkBox) {
-        parent.querySelector('input[type="checkbox"]').style.display = 'none';
-    }
-
-    if (checkBox) {
         const taskText = parent.querySelector('.task-txt');
         const taskDate = parent.querySelector('.task-due-date');
+        checkBox.style.display = 'none';
         taskText.style.display = 'none';
         taskDate.style.display = 'none';
         txtInput.value = taskText.textContent;
@@ -170,22 +181,29 @@ function createEditFields(parent) {
         } else {
             submitButton.disabled = true;
         }
-    })
-    parent.insertBefore(txtInput, parent.childNodes[1]);
-    parent.insertBefore(dateInput, parent.childNodes[2]);
-    parent.insertBefore(submitButton, parent.childNodes[3]);
-    parent.insertBefore(addSubtaskBtn, parent.childNodes[4]);
+    });
+    parent.insertBefore(txtInput, parent.childNodes[parent.childNodes.length - 5]);
+    parent.insertBefore(urgentCheckbox, parent.childNodes[parent.childNodes.length - 5]);
+    parent.insertBefore(label, parent.childNodes[parent.childNodes.length - 5]);
+    parent.insertBefore(dateInput, parent.childNodes[parent.childNodes.length - 5]);
+    parent.insertBefore(submitButton, parent.childNodes[parent.childNodes.length - 5]);
+    parent.insertBefore(addSubtaskBtn, parent.childNodes[parent.childNodes.length - 5]);
 }
 
 function clearEditFields() {
-    const editFields = document.querySelectorAll('#tasktxt, #taskdate');
+    const editFields = document.querySelectorAll('#tasktxt, #taskdate, #isurgent, #isurgent-label');
 
     if (editFields.length == 0) {
         return;
     }
-    const parent = editFields[0].parentNode;
 
+    const parent = editFields[0].parentNode;
     const mainTask = parent.querySelector('h2');
+    let urgentDiv = parent.querySelector('.urgent-task');
+    if (urgentDiv) {
+        urgentDiv.style.display = 'initial';
+    }
+
     if (mainTask) {
         mainTask.style.display = 'block';
     } else {
@@ -228,8 +246,10 @@ function editButtonHandler(event) {
     submitTaskBtn.addEventListener('click', () => {
         const taskTxt = document.querySelector('#tasktxt');
         const taskDate = document.querySelector('#taskdate');
+        const urgent = document.querySelector('#isurgent');
         if (taskTxt.validity.valid) {
-            PubSub.publish('editTask', {projectID: Number(projectID), taskID: taskID, subtaskID: subtaskID, txt: taskTxt.value, due: taskDate.value, filter: filterType});
+            PubSub.publish('editTask', {projectID: Number(projectID), taskID: taskID, subtaskID: subtaskID, 
+                                        txt: taskTxt.value, due: taskDate.value, filter: filterType, urgent: urgent.checked});
         } else {
             showErrorModal('Task title cannot be empty.');
         }
@@ -275,8 +295,8 @@ function createEditElements(parent) {
         title.appendChild(editButton);
         title.appendChild(deleteButton);
     } else {
-        parent.insertBefore(editButton, parent.childNodes[5]);
-        parent.insertBefore(deleteButton, parent.childNodes[6]);
+        parent.insertBefore(editButton, parent.childNodes[6]);
+        parent.insertBefore(deleteButton, parent.childNodes[7]);
     }
 }
 
@@ -338,8 +358,8 @@ function editFilterTaskHandler(event) {
 function handleFilteredTodoClick(event) {
     let targetNode = event.target;
     const nodeName = targetNode.nodeName.toLowerCase();
-    if (nodeName == 'li' || nodeName == 'h2' || targetNode.type == 'checkbox' || nodeName == 'span') {
-        if (targetNode.type == 'checkbox') {
+    if (nodeName == 'li' || nodeName == 'h2' || targetNode.id == 'isdone' || nodeName == 'span') {
+        if (targetNode.id == 'isdone') {
             targetNode = event.target.parentElement;
         }
         const li = targetNode.closest('li');
