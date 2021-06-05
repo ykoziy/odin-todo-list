@@ -24,6 +24,7 @@ function generateFilterListItem(projectID, taskID, subtaskID, task) {
     return `<li data-projectid="${projectID}" data-taskid="${taskID}" ${subtaskDataID} >
             <input type="checkbox" id="isdone" ${task.isDone ? 'checked' : ''}>
             <span ${htmlClass}>${task.title}</span>${urgent}<span class='task-due-date'>${dueDate}</span>
+            <div class="edit-btns"></div>
             <div class="edit-task-btn">...</div>
             </li>`;
 }
@@ -33,7 +34,7 @@ function generateTaskListItem(id, task) {
     const dueDate = task.dueDate ? format(task.dueDate, 'MM-dd-yyyy') : '';
     const urgent = task.isUrgent ? '<div class="urgent-task"></div>' : '';
     return `<li data-id="${id}" class="subtask"><input type="checkbox" id="isdone" ${task.isDone ? 'checked' : ''}>
-            <span ${htmlClass}>${task.title}</span>${urgent}<span class='task-due-date'>${dueDate}</span></li>`;
+            <span ${htmlClass}>${task.title}</span>${urgent}<span class='task-due-date'>${dueDate}</span><div class="edit-btns"></div></li>`;
 }
 
 function taskMarkup(id, task) {
@@ -43,7 +44,7 @@ function taskMarkup(id, task) {
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <div class="title" data-duedate=${dueDate}><h2 ${classDone}>${task.title}</h2>${urgent}</div>
+                <div class="title" data-duedate=${dueDate}><h2 ${classDone}>${task.title}</h2>${urgent}<div class="edit-btns"></div></div>
                 <div class="edit-task-btn">...</div>
             </div>                           
         </div>
@@ -61,7 +62,7 @@ function subtasksMarkup(id, task) {
     return `
         <div class="task" data-id="${id}">
             <div class="task-title">
-                <div class="title"><h2 ${classDone}>${task.title}</h2>${urgent}</div>
+                <div class="title"><h2 ${classDone}>${task.title}</h2>${urgent}<div class="edit-btns"></div></div>
                 <div class="edit-task-btn">...</div>
             </div>
             <div class="task-todos">
@@ -150,6 +151,7 @@ function createEditFields(parent) {
     addSubtaskBtn.innerHTML = '<i class="fas fa-plus-square"></i>';
 
     if (checkBox) {
+        // a subtask
         const taskText = parent.querySelector('.task-txt');
         const taskDate = parent.querySelector('.task-due-date');
         checkBox.style.display = 'none';
@@ -161,10 +163,11 @@ function createEditFields(parent) {
         }
 
     } else {
+        // a task
         parent.childNodes[0].style.display = 'none';
         txtInput.value = parent.textContent;
         const dueDate = parent.dataset.duedate;
-        const taskTodos = parent.parentNode.parentNode.querySelector('.task-todos');
+        const taskTodos = parent.closest('.task-todos');
 
         if (taskTodos) {
             dateInput.disabled = true;
@@ -182,34 +185,36 @@ function createEditFields(parent) {
             submitButton.disabled = true;
         }
     });
-    parent.insertBefore(txtInput, parent.childNodes[parent.childNodes.length - 5]);
-    parent.insertBefore(urgentCheckbox, parent.childNodes[parent.childNodes.length - 5]);
-    parent.insertBefore(label, parent.childNodes[parent.childNodes.length - 5]);
-    parent.insertBefore(dateInput, parent.childNodes[parent.childNodes.length - 5]);
-    parent.insertBefore(submitButton, parent.childNodes[parent.childNodes.length - 5]);
-    parent.insertBefore(addSubtaskBtn, parent.childNodes[parent.childNodes.length - 5]);
+    const editBtns = parent.querySelector('.edit-btns');
+    let beforeNode = editBtns.childNodes[editBtns.childNodes.length - 2];
+    editBtns.insertBefore(txtInput, beforeNode);
+    editBtns.insertBefore(txtInput, beforeNode);
+    editBtns.insertBefore(txtInput, beforeNode);
+    editBtns.insertBefore(urgentCheckbox, beforeNode);
+    editBtns.insertBefore(label, beforeNode);
+    editBtns.insertBefore(dateInput, beforeNode);
+    editBtns.insertBefore(submitButton, beforeNode);
+    editBtns.insertBefore(addSubtaskBtn, beforeNode);
 }
 
 function clearEditFields() {
     const editFields = document.querySelectorAll('#tasktxt, #taskdate, #isurgent, #isurgent-label');
-
     if (editFields.length == 0) {
         return;
     }
-
-    const parent = editFields[0].parentNode;
+    const parent = editFields[0].parentNode.parentNode;
     const mainTask = parent.querySelector('h2');
     let urgentDiv = parent.querySelector('.urgent-task');
     if (urgentDiv) {
-        urgentDiv.style.display = 'initial';
+        urgentDiv.style.removeProperty('display');
     }
 
     if (mainTask) {
         mainTask.style.display = 'block';
     } else {
-        parent.querySelector('input[type="checkbox"]').style.display = 'initial';
-        parent.querySelector('.task-txt').style.display = 'initial';
-        parent.querySelector('.task-due-date').style.display = 'initial';
+        parent.querySelector('input[type="checkbox"]').style.removeProperty('display');
+        parent.querySelector('.task-txt').style.removeProperty('display');
+        parent.querySelector('.task-due-date').style.removeProperty('display');
     }
 
     editFields.forEach(item => {
@@ -220,7 +225,7 @@ function clearEditFields() {
 }
 
 function editButtonHandler(event) {
-    const parentElement = event.currentTarget.parentNode;
+    const parentElement = event.currentTarget.parentNode.parentNode;
     const filter = document.getElementById('filter-todos');
     let filterType = null;
     let projectID, taskID, subtaskID;
@@ -232,7 +237,7 @@ function editButtonHandler(event) {
     } else {
         projectID = document.querySelector('.project-title').dataset.idx;
         taskID = parentElement.closest('.task').dataset.id;
-        subtaskID = parentElement.dataset.id;        
+        subtaskID = parentElement.dataset.id;
     }
     const listItem = parentElement;
 
@@ -254,7 +259,6 @@ function editButtonHandler(event) {
             showErrorModal('Task title cannot be empty.');
         }
     });
-
     addSubtaskBtn.addEventListener('click', () => {
         showAddSubtaskModal(projectID, taskID);
     });
@@ -273,7 +277,7 @@ function deleteButtonHandler(event) {
     } else {
         projectID = document.querySelector('.project-title').dataset.idx;
         taskID = event.currentTarget.closest('.task').dataset.id;
-        subtaskID = event.currentTarget.parentElement.dataset.id;     
+        subtaskID = event.currentTarget.parentElement.parentElement.dataset.id;  
     }    
     showDeleteConfirmationModal({projectID: projectID, taskID: taskID, subtaskID: subtaskID, filter: filterType}, 'deleteTask');
 }
@@ -289,15 +293,10 @@ function createEditElements(parent) {
     deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
     deleteButton.addEventListener('click', deleteButtonHandler); 
 
-    const title = parent.querySelector('.title');
+    const editBtns = parent.querySelector('.edit-btns');
 
-    if (title) {
-        title.appendChild(editButton);
-        title.appendChild(deleteButton);
-    } else {
-        parent.insertBefore(editButton, parent.childNodes[6]);
-        parent.insertBefore(deleteButton, parent.childNodes[7]);
-    }
+    editBtns.appendChild(editButton);
+    editBtns.appendChild(deleteButton);
 }
 
 
