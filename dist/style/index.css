@@ -52,6 +52,7 @@ h3 {
     flex-grow: 0.1;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid #A5A5A5;
 }
 
 #navigation {
@@ -130,17 +131,12 @@ h3 {
     margin-right: 10px;
 }
 
-/* placeholder styling */
-.fifty {
-    background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(-90deg, slategray 50%, transparent 50%);
-}
-
-.hundred {
-    background-image: linear-gradient(90deg, slategray 50%, transparent 50%), linear-gradient(-90deg, slategray 50%, transparent 50%);
-}
-
 #add-project {
     padding: 10px;
+}
+
+#add-project:hover {
+    border-top: 2px solid #db4c3f
 }
 
 #add-project-btn {
