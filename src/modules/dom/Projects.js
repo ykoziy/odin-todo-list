@@ -13,7 +13,7 @@ function updateProjectProgress(msg, data) {
 function renderProjects(projects) {
     const listItem = document.createElement('div');
     listItem.classList.add('cicrle-status');
-    let html = '<div id="projects-title">Projects</div>';
+    let html = '<div id="projects-title"><h3>Projects</h3></div>';
     html += `${
         projects.map((proj, idx) => {
             const style = setProgress(proj.getPercentComplete());

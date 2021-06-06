@@ -10,7 +10,8 @@ html {
     --buttonFontSize: 1.7rem;
     --buttonFontFamily: 'Padauk', sans-serif;
     --h1FontSize: 2rem;
-    --h2FontSize: 1.5rem;    
+    --h2FontSize: 1.5rem;
+    --h3FontSize: 1.17rem;  
 }
 
 body {
@@ -21,11 +22,22 @@ body {
 h1 {
     font-size: var(--h1FontSize);
     font-weight: bold;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
 }
 
 h2 {
     font-size: var(--h2FontSize);
     font-weight: bold;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;    
+}
+
+h3 {
+    font-size: var(--h3FontSize);
+    font-weight: bold;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
 }
 
 #content {
