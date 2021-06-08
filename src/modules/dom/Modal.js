@@ -97,7 +97,7 @@ function showAddProjectModal() {
     modal.innerHTML = markup('Add Project');
 
     const modalForm = modal.querySelector('form');
-    modalForm.setAttribute('id', 'add-project');
+    modalForm.setAttribute('id', 'add-project-form');
 
     createAndAppendLabel('name', 'Project name:', modalForm);
     createAndAppendInput('text', 'name', true, modalForm);
