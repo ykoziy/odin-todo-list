@@ -45,10 +45,6 @@ class App {
     }
 
     addNewProject(msg, data) {
-        if (this.containsProject(data.name)) {
-            showErrorModal('Project name must be unique.');
-            return;
-        }
         const proj = new Project(data.name, data.description);
         this.projects.push(proj);
         DataStore.saveTodoData(this.projects);
@@ -167,10 +163,6 @@ class App {
     }
 
     editProjectHandler(msg, data) {
-        if (this.containsProject(data.title)) {
-            showErrorModal('Project name must be unique.');
-            return;
-        }
         this.projects[data.projectID].title = data.title;
         this.projects[data.projectID].description = data.description;
         DataStore.saveTodoData(this.projects);
