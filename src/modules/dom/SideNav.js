@@ -20,8 +20,8 @@ function newProjectHandler(event) {
 
 function navHandler(event) {
     const node = event.target.nodeName.toLowerCase();
-    if (node !== 'li') return;
-    let menuButton = event.target.dataset.name;
+    if (node !== 'li' && node !== 'p' && node !== 'i') return;
+    let menuButton = event.target.closest('li').dataset.name;
     switch (menuButton) {
         case 'inbox':
             PubSub.publish('inboxNavClick', null);
@@ -69,7 +69,7 @@ function renderHTML(parentElement, projects) {
     searchInput.addEventListener('keydown', searchTaskHandler);    
 
     const navMenu = div.querySelector('nav ul');
-    navMenu .addEventListener('click', navHandler);
+    navMenu.addEventListener('click', navHandler);
 
     const projecstList = div.querySelector('#projects ul');
     projecstList.addEventListener('click', projectHandler);    
