@@ -79,8 +79,8 @@ function createAndAppendInput(type, id, isRequired, parent, value) {
 function createAndAppendChoicesDiv(parent) {
     const div = document.createElement('div');
     div.setAttribute('id', 'modal-choice');
-    createAndAppendInput('submit', 'submit-modal', null, div, 'OK');
-    createAndAppendInput('button', 'submit-modal', null, div, 'Cancel');
+    createAndAppendInput('submit', 'submit-modal-ok', null, div, 'OK');
+    createAndAppendInput('button', 'submit-modal-cancel', null, div, 'Cancel');
     div.querySelector('input[type="button"]').addEventListener('click', hideModal);
     parent.appendChild(div);   
 }
