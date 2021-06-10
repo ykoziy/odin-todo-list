@@ -253,8 +253,8 @@ function init() {
     let projects = [new Project('Todos', 'Tasks created without a projects get stored here.')];
 
     if (DataStore.isDatastoreEmpty()) {
-        projects.push(...generateProjects(4));
-        //DataStore.saveTodoData(projects);
+        //projects.push(...generateProjects(4));
+        DataStore.saveTodoData(projects);
     } else {
         projects = DataStore.getTodoData();
     }
