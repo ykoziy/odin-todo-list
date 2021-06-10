@@ -76,6 +76,31 @@ h3 {
     margin-left: -3px;
 }
 
+#navigation li i {
+    margin-right: 10px;
+}
+
+#navigation li p {
+    display: inline-block;
+}
+
+#inbox-nav i {
+    color: #21adf5;
+}
+
+#upcoming-nav i {
+    color: #fd326b;
+    padding-right: 5px;
+}
+
+#today-nav i {
+    color: orange;
+}
+
+#urgent-nav i {
+    color: #db4c3f;
+}
+
 #search {
     padding-bottom: 15px;
 }
